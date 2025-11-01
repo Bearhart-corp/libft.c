@@ -32,7 +32,9 @@ static char g_current_test[100];
 static void h_puts(const char *s) { if (s) write(1, s, (size_t)strlen(s)); }
 static void h_putendl(const char *s) { h_puts(s); write(1, "\n", 1); }
 static void del(void *content){(void)content;}
-static void *f(void *content)
+static void f(void *content)
+{*(int *)content *= 2;}
+static void *ff(void *content)
 {
 	int *buf = malloc(sizeof(int));
 	*buf = *(int *)content * 2;
@@ -479,7 +481,7 @@ void test_ft_lstiter(void)
 	ft_lstadd_back(&list, node2);
 	ft_lstadd_back(&list, node3);
 
-	ft_lstiter(list, &f);
+	ft_lstiter(list, f);
 	CHECK(*(int *)node1->content == 2 &&
 			*(int *)node2->content == 4 &&
 			*(int *)node3->content == 6,
@@ -544,10 +546,10 @@ void test_ft_lstmap(void)
 	ft_lstadd_back(&list, node2);
 	ft_lstadd_back(&list, node3);
 
-	vide = ft_lstmap(vide, &f, &del);
+	vide = ft_lstmap(vide, &ff, &del);
 	CHECK(vide == NULL, "le cas vide");
 
-	t_list *buf = ft_lstmap(list, &f, &del);
+	t_list *buf = ft_lstmap(list, &ff, &del);
 	CHECK(*(int *)buf->content == *(int *)(node1->content) * 2 &&
 	buf != node1,
 	"le 1er node a la meme valeur *2 mais pas la meme adresse");
