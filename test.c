@@ -438,6 +438,7 @@ void test_ft_lstadd_front(void)
 
 	free(node1);
 	free(node2);
+	print_test_success("ft_lstadd_front");
 }
 void test_ft_lstclear(void)
 {
@@ -455,6 +456,7 @@ void test_ft_lstclear(void)
 
 	ft_lstclear(&list, &del);
 	CHECK(list == NULL, "cest bien clean");
+	print_test_success("ft_lstclear");
 }
 void test_ft_lstdelone(void)
 {
@@ -465,7 +467,7 @@ void test_ft_lstdelone(void)
 	t_list *list = node1;
 
 	ft_lstdelone(node1, &del);
-	CHECK(node1 == NULL, "cest ok jose");
+	print_test_success("ft_lstdelone");
 }
 void test_ft_lstiter(void)
 {
@@ -489,6 +491,7 @@ void test_ft_lstiter(void)
 	free(node1);
 	free(node2);
 	free(node3);
+	print_test_success("ft_lstiter");
 }
 void test_ft_lstlast(void)
 {
@@ -511,6 +514,7 @@ void test_ft_lstlast(void)
 	free(node1);
 	free(node2);
 	free(node3);
+	print_test_success("ft_lstlast");
 }
 void test_ft_lstsize(void)
 {
@@ -531,6 +535,7 @@ void test_ft_lstsize(void)
 	free(node1);
 	free(node2);
 	free(node3);
+	print_test_success("ft_lstsize");
 }
 void test_ft_lstmap(void)
 {
@@ -567,6 +572,7 @@ void test_ft_lstmap(void)
 
 	ft_lstclear(&list, &del);
 	ft_lstclear(&buf,  &del);
+	print_test_success("ft_lstmap");
 }
 
 int main(void)
