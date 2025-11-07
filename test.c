@@ -33,7 +33,13 @@ static void h_puts(const char *s) { if (s) write(1, s, (size_t)strlen(s)); }
 static void h_putendl(const char *s) { h_puts(s); write(1, "\n", 1); }
 static void del(void *content){(void)content;}
 static void f(void *content)
+<<<<<<< HEAD
 {*(int *)content *= 2;}
+=======
+{
+	*(int *)content = *(int *)content * 2;
+}
+>>>>>>> 0a0f5ff (ajout de printf maison)
 static void *ff(void *content)
 {
 	int *buf = malloc(sizeof(int));
@@ -467,6 +473,10 @@ void test_ft_lstdelone(void)
 	t_list *list = node1;
 
 	ft_lstdelone(node1, &del);
+<<<<<<< HEAD
+=======
+	CHECK(node1 == NULL, "cest ok jose");
+>>>>>>> 0a0f5ff (ajout de printf maison)
 	print_test_success("ft_lstdelone");
 }
 void test_ft_lstiter(void)

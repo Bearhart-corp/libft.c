@@ -1,18 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
+/*   ft_puthex.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tbelard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/27 13:08:22 by tbelard           #+#    #+#             */
-/*   Updated: 2025/10/27 13:08:23 by tbelard          ###   ########.fr       */
+/*   Created: 2025/11/07 17:52:59 by tbelard           #+#    #+#             */
+/*   Updated: 2025/11/07 17:53:01 by tbelard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
 
-void	ft_putstr_fd(char *s, int fd)
+#include "printf.h"
+
+size_t	ft_putnbr(long n)
 {
-	write(fd, s, ft_strlen(s));
+	char	tmp;
+	size_t	count;
+	long	nb;
+	char	buf[100];
+
+	nb = n;
+	count = 0;
+	if (n < 0)
+		count += write(fd, "-", 1);
+	while (n >= 10)
+	{
+		tmp = (n % 10) + '0';
+		n /= 10;
+	}		
+	count += write(fd, &tmp, 1);
+	return (count);
 }

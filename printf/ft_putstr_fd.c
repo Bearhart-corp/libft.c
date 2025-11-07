@@ -10,9 +10,18 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "printf.h"
 
-void	ft_putstr_fd(char *s, int fd)
+size_t	ft_putstr_fd(char *s, int fd, size_t size)
 {
-	write(fd, s, ft_strlen(s));
+	size_t	count;
+
+	if (!s)
+		return (0);
+	if (!size)
+		count = ft_strlen(s);
+	else
+		count = size;
+	write(fd, s, count);
+	return (count);
 }
