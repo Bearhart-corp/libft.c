@@ -10,14 +10,23 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "printf.h"
+#include <unistd.h>
+
+static int	power(size_t pow)
+{
+	int	acc;
+
+	acc = 1;
+	while (pow--)
+		acc = acc * 10;
+	return (acc);
+}
 
 size_t	ft_putfloat(double n, size_t accuracy)
 {
 	long	n_int;
 	size_t	count;
-	char	c;
 
 	count = 0;
 	if (n < 0)
@@ -25,12 +34,18 @@ size_t	ft_putfloat(double n, size_t accuracy)
 		n = -n;
 		count += write(1, "-", 1);
 	}
-	n += 0.0000005;
+	n += (0.5 / power(accuracy));
 	n_int = (long)n;
-	count += ft_putnbr_fd(n_int, 1, 0);
+	count += ft_putnbr(n_int, 10, 0, 0);
 	count += write(1, ".", 1);
-	n = (n - n_int) * accuracy;
-	count += ft_putnbr_fd(n, 1, 0);
+	n = (n - n_int) * power(accuracy);
+	count += ft_putnbr(n, 10, 0, 0);
 	return (count);
 }
+/*
+int main()
+{
+	ft_putfloat(42.123, 6);
+}*/
 // accuracy : if precision .2f alors 100 pour .6f  alors 1000000
+//ft_putnbr(long n, int unsign, unsigned short int base, int upper)

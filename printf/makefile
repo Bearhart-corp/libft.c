@@ -21,7 +21,6 @@ SRC = ft_putchar_fd.c \
 	ft_putstr_fd.c \
 	ft_strlen.c \
 	ft_tolower.c \
-	ft_puthex.c \
 	ft_putfloat.c \
 	ft_toupper.c 
 

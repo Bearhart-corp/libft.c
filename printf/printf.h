@@ -18,15 +18,13 @@
 
 # define SIZE_MAX -1
 
-int	ft_printf(const char *, ...);
-
-void	*ft_calloc(size_t nmemb, size_t size);
+int		ft_printf(const char *fmt, ...);
+size_t	ft_putfloat(double n, size_t accuracy);
 int		ft_tolower(int c);
 int		ft_toupper(int c);
 size_t	ft_strlen(const char *s);
 size_t	ft_putchar_fd(char c, int fd);
-size_t	ft_putnbr_fd(long n, int fd, int unsign);
+size_t	ft_putnbr(long n, unsigned short int base, int upper, int flag);
 size_t	ft_putstr_fd(char *s, int fd, size_t size);
-void	ft_bzero(void *s, size_t n);
 
 #endif
