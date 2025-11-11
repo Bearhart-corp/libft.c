@@ -12,16 +12,50 @@
 
 #include "printf.h"
 
-size_t	ft_putstr_fd(char *s, int fd, size_t size)
+size_t	ft_putstr_fd(char *s, t_flags flags_struct)
 {
 	size_t	count;
+	int		largeur;
+	int		i;
+	char	sz;
 
+	if (flags_struct.flags & ZEROS)
+		sz = '0';
+	else
+		sz = 32;
+	i = 0;
+	largeur = 0;
+	count = 0;
+	largeur = flags_struct.width;
 	if (!s)
 		return (0);
-	if (!size)
-		count = ft_strlen(s);
+	if (flags_struct.width)
+		i = largeur - ft_strlen(s);
+	if (flags_struct.flags & START_LEFT)
+	{
+		while (*s)
+		{
+			count += write(1, s, 1);
+			s++;
+		}
+		while (i <= largeur)
+		{
+			count += write(1, &sz, 1);
+			i++;
+		}
+	}
 	else
-		count = size;
-	write(fd, s, count);
+	{
+		while (i <= largeur)
+		{
+			count += write(1, &sz, 1);
+			i++;
+		}
+		while (*s)
+		{
+			count += write(1, s, 1);
+			s++;
+		}
+	}
 	return (count);
 }

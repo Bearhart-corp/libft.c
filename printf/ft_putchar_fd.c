@@ -12,10 +12,14 @@
 
 #include "printf.h"
 
-size_t	ft_putchar_fd(char c, int fd)
+size_t	ft_putchar_fd(char c, t_flags flags_struct)
 {
+	int 	i;
+
+	i = flags_struct.flags;
+	i++;
 	if (!c)
 		return (0);
-	write(fd, &c, 1);
+	write(1, &c, 1);
 	return (1);
 }

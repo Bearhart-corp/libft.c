@@ -12,63 +12,37 @@
 
 #include "libft.h"
 
-static int	is_set(char c, char const *set)
-{
-	int	i;
-
-	i = 0;
-	while (set[i])
-	{
-		if (c == set[i])
-			return (1);
-		i++;
-	}
-	return (0);
-}
-
-static int	alloc(char const *s1, char const *set)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	j = 0;
-	while (s1[i + j])
-	{
-		if (!is_set(s1[i + j], set))
-			i++;
-		else
-			j++;
-	}
-	return (i + 1);
-}
-
 char	*ft_strtrim(char const *s1, char const *set)
 {
-	size_t		i;
-	char		*buf;
-	int			j;
+	int		start;
+	char	*buf;
+	int		end;
+	int		k;
 
-	buf = malloc(alloc(s1, set));
-	i = 0;
-	j = 0;
-	while (s1[i])
-	{
-		if (!is_set(s1[i], set))
-		{
-			buf[j] = s1[i];
-			j++;
-		}
-		i++;
-	}
-	buf[j] = 0;
+	if (!set)
+		return ((char *)s1);
+	if (!s1 || !set)
+		return (NULL);
+	start = 0;
+	k = 0;
+	end = ft_strlen(s1) - 1;
+	while (ft_strchr(set, s1[start]) != 0 && s1[start])
+		start++;
+	while (ft_strchr(set, s1[end]) != 0 && (end > start))
+		end--;
+	buf = malloc((end - start) + 2);
+	if (!buf)
+		return (NULL);
+	while (start <= end)
+		buf[k++] = s1[start++];
+	buf[k] = 0;
 	return (buf);
 }
 
 /*
 int main()
 {
-	char *s =ft_strtrim("hello", "");
+	char *s =ft_strtrim(NULL, "ABC");
 	printf("%s\n", s);
-	free(s);
+	//free(s);
 }*/

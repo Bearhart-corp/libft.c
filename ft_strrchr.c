@@ -11,28 +11,35 @@
 /* ************************************************************************** */
 
 #include "libft.h"
-#include <stdio.h>
 
-char	*ft_strrchr(const char *string, int searchedChar)
+char	*ft_strrchr(const char *s, int c)
 {
-	int	i;
+	size_t	i;
+	char	*der;
 
-	i = ft_strlen(string);
-	if (string[i] == (char)searchedChar && !string[i])
-		return ((char *)string + i);
-	while (string[--i])
+	i = 0;
+	der = NULL;
+	while (1)
 	{
-		if (string[i] == (char)searchedChar)
-			return ((char *)string + i);
+		if (s[i] == (char)c)
+			der = ((char *)s + i);
+		if (!s[i])
+		{
+			if (s[i] == (char)c)
+				der = ((char *)s + i);
+			break ;
+		}
+		i++;
 	}
-	return (NULL);
+	return (der);
 }
 
 /*
 int main()
 {
-	char s[] = "12a3a123";
-	char *p = ft_strrchr(s, 0);
+	char s[] = "hello";
+	char *p = ft_strrchr(s, 'h');
 	printf("%p\n", s);
 	printf("%p\n", p);
+	//on cherche dans la string jusqua 0 puis a 0 puis on break 
 }*/

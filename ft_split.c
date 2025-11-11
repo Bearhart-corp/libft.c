@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tbelard <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: tbelard <tbelard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/27 13:06:12 by tbelard           #+#    #+#             */
-/*   Updated: 2025/10/27 13:06:14 by tbelard          ###   ########.fr       */
+/*   Updated: 2025/11/04 10:46:22 by tbelard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,36 +35,38 @@ static int	count_w(char const *s, char c)
 	return (count);
 }
 
-static void	free_split(char **buf, size_t *k)
+static void	free_split(char **buf, size_t k)
 {
-	while (*k > 0)
-		free(buf[--(*k)]);
+	while (k > 0)
+		free(buf[--(k)]);
 	free(buf);
 }
 
-static int	helper(char const *s, char c, size_t *k, char **buf)
+static int	helper(char const *s, char c, size_t count, char **buf)
 {
-	int		j;
-	int		l;
+	size_t	j;
+	size_t	l;
+	size_t	k;
 
-	while (*s)
+	k = 0;
+	while (k < count)
 	{
-		l = -1;
+		l = SIZE_MAX;
 		j = 0;
 		while (*s && *s == c)
 			s++;
 		while (s[j] && s[j] != c)
 			j++;
-		buf[*k] = malloc(j + 1);
-		if (!buf[*k])
+		buf[k] = malloc(j + 1);
+		if (!buf[k])
 		{
 			free_split(buf, k);
 			return (1);
 		}
 		while (++l < j)
-			buf[*k][l] = s[l];
+			buf[k][l] = s[l];
 		s = s + j;
-		buf[(*k)++][l] = 0;
+		buf[k++][l] = 0;
 	}
 	return (0);
 }
@@ -72,24 +74,26 @@ static int	helper(char const *s, char c, size_t *k, char **buf)
 char	**ft_split(char const *s, char c)
 {
 	char		**buf;
-	size_t		k;
+	size_t		count;
 
-	k = 0;
-	buf = malloc((count_w(s, c) + 1) * sizeof(char *));
+	if (!s)
+		return (NULL);
+	count = count_w(s, c);
+	buf = malloc((count + 1) * sizeof(char *));
 	if (!buf)
 		return (NULL);
-	if (helper(s, c, &k, buf))
+	if (helper(s, c, count, buf))
 		return (NULL);
 	else
-		buf[k] = NULL;
+		buf[count] = NULL;
 	return (buf);
 }
 
 /*
 int main()
 {
-	char const s[] = "  ta maman la chauve   ";
-	char **chauve = ft_split(s, ' ');
+	char const s[] = "";
+	char **chauve = ft_split(s, 0);
 	int i = 0;
 	if (!chauve)
 	{

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_substr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tbelard <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: tbelard <tbelard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/27 13:05:15 by tbelard           #+#    #+#             */
-/*   Updated: 2025/10/27 13:05:17 by tbelard          ###   ########.fr       */
+/*   Updated: 2025/11/04 10:09:58 by tbelard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,18 +16,19 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
 	char	*buf;
 	size_t	j;
-	size_t	verif;
+	size_t	true_size;
 
-	verif = ft_strlen(s);
+	if (!s)
+		return (NULL);
+	true_size = ft_strlen(s);
 	j = 0;
-	if (len == 0 || start >= verif)
+	if (len == 0 || start >= true_size)
 	{
-		buf = malloc(1);
-		*buf = 0;
+		buf = ft_calloc(1, 1);
 		return (buf);
 	}
-	if (start + len > verif)
-		len = verif - start;
+	if (start + len > true_size)
+		len = true_size - start;
 	buf = malloc(len + 1);
 	if (!buf)
 		return (NULL);

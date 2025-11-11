@@ -13,17 +13,19 @@
 #include "printf.h"
 #include <unistd.h>
 
-static int	power(size_t pow)
+static int	power(char pow)
 {
 	int	acc;
+	int power;
 
+	power = (int)pow;
 	acc = 1;
 	while (pow--)
 		acc = acc * 10;
 	return (acc);
 }
 
-size_t	ft_putfloat(double n, size_t accuracy)
+size_t	ft_putfloat(double n, t_flags flags_struct)
 {
 	long	n_int;
 	size_t	count;
@@ -34,12 +36,12 @@ size_t	ft_putfloat(double n, size_t accuracy)
 		n = -n;
 		count += write(1, "-", 1);
 	}
-	n += (0.5 / power(accuracy));
+	n += (0.5 / power(flags_struct.prec));
 	n_int = (long)n;
-	count += ft_putnbr(n_int, 10, 0, 0);
+	count += ft_putnbr(n_int, flags_struct);
 	count += write(1, ".", 1);
-	n = (n - n_int) * power(accuracy);
-	count += ft_putnbr(n, 10, 0, 0);
+	n = (n - n_int) * power(flags_struct.prec);
+	count += ft_putnbr(n, flags_struct);
 	return (count);
 }
 /*
