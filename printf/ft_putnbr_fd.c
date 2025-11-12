@@ -22,7 +22,7 @@ static int helper(t_flags flags_struct, int *upper)
 			base = 16;
 	else
 		base = 10;
-	if (flags_struct.conversion == 5)
+	if (flags_struct.conversion == 7)
 		*upper = 1;
 	else
 		*upper = 0;
@@ -59,6 +59,8 @@ size_t	ft_putnbr(long n, t_flags flags_struct)
 	upper = 0;
 	count = 0;
 	tmp = (unsigned long)n;
+	if (flags_struct.conversion == 3 && !n)
+		return count += write(1, "(nil)", 5);
 	base = helper(flags_struct, &upper);
 	if (n < 0 && (!(tmp & (tmp - 1))))
 	{
@@ -68,7 +70,7 @@ size_t	ft_putnbr(long n, t_flags flags_struct)
 			count += write(1, "9223372036854776000", 19);
 	}
 	else
-		ft_putnbr_help(n, flags_struct, base, upper);
+		count += ft_putnbr_help(n, flags_struct, base, upper);
 	return (count);
 }
 /*

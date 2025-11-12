@@ -142,7 +142,9 @@ int	ft_printf(const char (*fmt), ...)
 
 int main()
 {
-	ft_printf(" %p %p ", (void *)LONG_MIN, (void *)LONG_MAX);
-	   int n = printf(" %p %p ", (void *)LONG_MIN, (void *)LONG_MAX);
-	   printf("%d\n",n );
+	int n1 = ft_printf(" %.3f \n", 42.1225);
+	int n2 =    printf(" %.3f \n", 42.1225);
+	   printf("n:%d\n",n1 );
+	    printf("n2:%d\n",n2 );
 }
+//test 0
