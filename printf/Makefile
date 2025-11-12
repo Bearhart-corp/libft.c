@@ -22,13 +22,15 @@ SRC = ft_putchar_fd.c \
 	ft_strlen.c \
 	ft_tolower.c \
 	ft_putfloat.c \
-	ft_toupper.c 
+	ft_toupper.c \
+	ft_printf.c
 
 OBJ = $(SRC:.c=.o)
 
 all: $(NAME)
 $(NAME) : $(OBJ)
 	ar rsc $(NAME) $(OBJ)
+bonus: $(NAME)
 
 %.o: %.c libftprintf.h
 	$(CC) $(CFLAGS) -c $< -o $@
@@ -37,8 +39,8 @@ clean:
 	rm -rf $(OBJ) 
 
 fclean: clean
-	rm -rf $(NAME)
+#	rm -rf $(NAME)
 
 re: fclean clean
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean bonus re

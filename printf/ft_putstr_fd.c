@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "printf.h"
+#include "ft_printf.h"
 
 size_t	ft_putstr_fd(char *s, t_flags flags_struct)
 {
@@ -19,7 +19,7 @@ size_t	ft_putstr_fd(char *s, t_flags flags_struct)
 	int		i;
 	char	sz;
 
-	if (flags_struct.flags & ZEROS)
+	if ((flags_struct.flags & ZEROS) && !(flags_struct.flags & START_LEFT))
 		sz = '0';
 	else
 		sz = 32;
@@ -28,9 +28,9 @@ size_t	ft_putstr_fd(char *s, t_flags flags_struct)
 	count = 0;
 	largeur = flags_struct.width;
 	if (!s)
-		return (0);
+		return (count += write(1, "(null)", 6));
 	if (flags_struct.width)
-		i = largeur - ft_strlen(s);
+		i = largeur - ft_strlen(s) - 1;
 	if (flags_struct.flags & START_LEFT)
 	{
 		while (*s)
@@ -46,11 +46,8 @@ size_t	ft_putstr_fd(char *s, t_flags flags_struct)
 	}
 	else
 	{
-		while (i <= largeur)
-		{
+		while (++i <= largeur && largeur)
 			count += write(1, &sz, 1);
-			i++;
-		}
 		while (*s)
 		{
 			count += write(1, s, 1);
@@ -59,3 +56,10 @@ size_t	ft_putstr_fd(char *s, t_flags flags_struct)
 	}
 	return (count);
 }
+
+/*1010 / 3 (*,/,-)
+
+sum = 0;
+	sum =+ n >> 2 
+	n = sum + (n & 3)
+*/

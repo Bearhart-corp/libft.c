@@ -10,16 +10,25 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "printf.h"
+#include "ft_printf.h"
 
 size_t	ft_putchar_fd(char c, t_flags flags_struct)
 {
 	int 	i;
+	int		largeur;
 
-	i = flags_struct.flags;
-	i++;
-	if (!c)
-		return (0);
-	write(1, &c, 1);
-	return (1);
+	largeur = flags_struct.width;
+	i = 0;
+	if (flags_struct.width)
+	{
+		if (flags_struct.flags & START_LEFT)
+			write(1, &c, 1);
+		while (++i < largeur)
+			write(1, " ", 1);
+		if (!(flags_struct.flags & START_LEFT))
+			write(1, &c, 1);
+	}
+	else
+		i = write(1, &c, 1);
+	return (i);
 }

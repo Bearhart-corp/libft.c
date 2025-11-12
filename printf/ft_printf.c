@@ -10,53 +10,31 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "printf.h"
+#include "ft_printf.h"
 #include <stdio.h>
 
-/* 
-Flags (-, 0, #, , +)
-
-- commence par la gauche
-0 zero filled si un - existe alors annule le 0
-# prefix dadress pour x et X ignore si utilise avec c,d,i,u,s
-SPACE ajoute juste un espace au lieu dun signe (+ ou -) si + cest ignore car en contradiction
-+ force le signe a etre affiche uniquement le negatif -
-
-Largeur minimale
-
-valeur unsigned int qui defini la largeur min
-si le contenue est plus petit que la width alors non pad a droite ou a gauche avec des 0 
-si specifie, JAMAIS de tronc, seul la precision le fait, 
-
-Précision
-
-si . alors valeur unsigned int , si val  = 0 alors pas d'output
-
-Conversion (d, s, x, etc.)
-
-FORMAT = struct 4 char
-avec 256posibilite pour la width et la precision
-et 2 char pour les flags
-*/
-
-static size_t print_fmt(const char **fmt, va_list lst, t_flags *flags_struct)
+static size_t print_fmt(va_list lst, t_flags *flags_struct)
 {
 	size_t	count;
+	long	tmp;
 
 	count = 0;
 	if ((*flags_struct).conversion == 1)
-	{
 		count += ft_putstr_fd(va_arg(lst, char *), *flags_struct);
-	}
 	else if ((*flags_struct).conversion == 2)
 		count += ft_putchar_fd((char)va_arg(lst, int), *flags_struct);
+	else if ((*flags_struct).conversion == 4)
+		count += ft_putnbr(va_arg(lst, int), *flags_struct);
 	else if ((*flags_struct).conversion > 2 && (*flags_struct).conversion < 8)
-		count += ft_putnbr((unsigned long)va_arg(lst, void *), *flags_struct);
-	else
 	{
-		count += ft_putfloat(va_arg(lst, double), *flags_struct);
-		(*fmt)++;
+		tmp = (unsigned long)va_arg(lst, void *);
+		if ((*flags_struct).conversion == 3 || (*flags_struct).flags == HASH)
+			if (tmp)
+				count += write(1, "0x", 2);
+		count += ft_putnbr(tmp, *flags_struct);
 	}
+	else
+		count += ft_putfloat(va_arg(lst, double), *flags_struct);
 	return (count);
 }
 
@@ -83,7 +61,7 @@ static size_t	conv(const char **fmt, va_list lst, t_flags *flags_struct)
 		(*flags_struct).conversion = 8;
 	else if ((**fmt) == '%')
 		return count += ft_putchar_fd('%', *flags_struct);
-	count += print_fmt(fmt, lst, flags_struct);
+	count += print_fmt(lst, flags_struct);
 	return (count);
 }
 
@@ -164,33 +142,7 @@ int	ft_printf(const char (*fmt), ...)
 
 int main()
 {
-//	char s[] = "hi";
-//	int count = ft_printf("test%s,%u, %.3f, %d", "Tomtom", -1, -17.123, -42);
-//	ft_printf("\n%d", count);
-printf("%-5s\n", "hi");
-ft_printf("%-5s\n", "hi");
-}/* 
-Flags (-, 0, #, , +)
-
-- commence par la gauche
-0 zero filled si un - existe alors annule le 0
-# prefix dadress pour x et X ignore si utilise avec c,d,i,u,s
-SPACE si signed et positif pad avec espace> si + cest ignore
-+ si negatif signed alors affiche le -
-
-Largeur minimale
-
-valeur unsigned int qui defini la largeur min
-si le contenue est plus petit que la width alors non pad a droite ou a gauche avec des 0 
-si specifie, JAMAIS de tronc, seul la precision le fait, 
-
-Précision
-
-si . alors valeur unsigned int , si val  = 0 alors pas d'output
-
-Conversion (d, s, x, etc.)
-
-FORMAT = struct 4 char
-avec 256posibilite pour la width et la precision
-et 2 char pour les flags
-*/
+	ft_printf(" %p %p ", (void *)LONG_MIN, (void *)LONG_MAX);
+	   int n = printf(" %p %p ", (void *)LONG_MIN, (void *)LONG_MAX);
+	   printf("%d\n",n );
+}

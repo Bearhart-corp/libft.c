@@ -10,50 +10,67 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "printf.h"
-
-static int helper(size_t *count, t_flags flags_struct, int *upper)
+#include "ft_printf.h"
+#include <stdio.h>
+static int helper(t_flags flags_struct, int *upper)
 {
 	int	base;
 
 	if (flags_struct.conversion == 6 ||
 		flags_struct.conversion == 7 ||
 		flags_struct.conversion == 3)
-		base = 16;
+			base = 16;
 	else
 		base = 10;
 	if (flags_struct.conversion == 5)
 		*upper = 1;
 	else
 		*upper = 0;
-	if (flags_struct.flags != 4 && flags_struct.flags != 5)
-		*count += write(1, "0x", 2);
 	return (base);
 }
 
-size_t	ft_putnbr(long n, t_flags flags_struct)
+static size_t	ft_putnbr_help(long n, t_flags flags_struct, int base, int up)
 {
 	char	tmp;
 	size_t	count;
-	int		base;
-	int		upper;
 
 	count = 0;
-	base = helper(&count, flags_struct, &upper);
 	if (n < 0)
 	{
 		count += write(1, "-", 1);
 		n = -n;
 	}
 	if (n >= base)
-		count += ft_putnbr(n / base, flags_struct);
+		count += ft_putnbr_help(n / base, flags_struct, base, up);
 	tmp = "0123456789abcdef"[n % base];
-	if (upper)
+	if (up)
 		tmp = ft_toupper(tmp);
 	count += write(1, &tmp, 1);
 	return (count);
 }
 
+size_t	ft_putnbr(long n, t_flags flags_struct)
+{
+	unsigned long	tmp;
+	size_t			count;
+	int				base;
+	int				upper;
+
+	upper = 0;
+	count = 0;
+	tmp = (unsigned long)n;
+	base = helper(flags_struct, &upper);
+	if (n < 0 && (!(tmp & (tmp - 1))))
+	{
+		if (base == 16)
+			count += write(1, "8000000000000000", 16);
+		else
+			count += write(1, "9223372036854776000", 19);
+	}
+	else
+		ft_putnbr_help(n, flags_struct, base, upper);
+	return (count);
+}
 /*
 int main()
 {
