@@ -30,12 +30,20 @@
 # define SPACE 8
 # define PLUS 16
 
+# define STRING 1
+# define LETTER 2
+# define INTEGER 3
+# define PTR 4
+# define UNSIGNED 5
+# define HEX_LOW 6
+# define HEX_MAJ 7
+
 typedef struct s_flags
 {
-	char	flags;
-	char	width;
-	char	prec;
-	char	conversion;
+	char			flags;
+	size_t			width;
+	unsigned char	prec;
+	char			conversion;
 }	t_flags;
 
 int		ft_printf(const char *fmt, ...);

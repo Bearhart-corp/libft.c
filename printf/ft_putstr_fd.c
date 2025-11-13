@@ -11,49 +11,65 @@
 /* ************************************************************************** */
 
 #include "ft_printf.h"
+#include <stdio.h>
 
 size_t	ft_putstr_fd(char *s, t_flags flags_struct)
 {
 	size_t	count;
-	int		largeur;
-	int		i;
+	size_t	largeur;
+	int		accuracy;
 	char	sz;
 
 	if ((flags_struct.flags & ZEROS) && !(flags_struct.flags & START_LEFT))
 		sz = '0';
 	else
 		sz = 32;
-	i = 0;
 	largeur = 0;
+	accuracy = 0;
 	count = 0;
-	largeur = flags_struct.width;
+	if (flags_struct.flags == SPACE)
+		count += write(1, " ", 1);
 	if (!s)
-		return (count += write(1, "(null)", 6));
-	if (flags_struct.width)
-		i = largeur - ft_strlen(s) - 1;
-	if (flags_struct.flags & START_LEFT)
 	{
-		while (*s)
+		if (flags_struct.prec && flags_struct.prec < 6)
+			return (0);
+		else
+			return (count += write(1, "(null)", 6));
+	}
+	if (flags_struct.prec)
+		accuracy = flags_struct.prec;
+	if (flags_struct.width)
+	{
+		if (flags_struct.prec)
+			largeur = (flags_struct.width - accuracy) - count;
+		else
+			largeur = (flags_struct.width - ft_strlen(s) - count);
+	}
+	if (flags_struct.width)
+	{
+		if (flags_struct.flags & START_LEFT)
 		{
-			count += write(1, s, 1);
-			s++;
+			while ((*s && accuracy-- ))
+				count += write(1, s++, 1);
+			while (largeur--)
+				count += write(1, &sz, 1);
 		}
-		while (i <= largeur)
+		else
 		{
-			count += write(1, &sz, 1);
-			i++;
+			while (largeur--)
+				count += write(1, &sz, 1);
+			largeur = flags_struct.width - ft_strlen(s);
+			if (accuracy)
+				while ((*s && accuracy-- ) && largeur++ <= flags_struct.width)
+					count += write(1, s++, 1);
+			else
+				while ((*s) && largeur++ <= flags_struct.width)
+					count += write(1, s++, 1);
 		}
 	}
 	else
-	{
-		while (++i <= largeur && largeur)
-			count += write(1, &sz, 1);
 		while (*s)
-		{
-			count += write(1, s, 1);
-			s++;
-		}
-	}
+			count += write(1, s++, 1);
 	return (count);
 }
 

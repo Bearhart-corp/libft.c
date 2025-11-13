@@ -16,22 +16,28 @@
 static size_t print_fmt(va_list lst, t_flags *flags_struct)
 {
 	size_t	count;
-	long	tmp;
 
 	count = 0;
-	if ((*flags_struct).conversion == 1)
+	if ((*flags_struct).conversion == STRING)
 		count += ft_putstr_fd(va_arg(lst, char *), *flags_struct);
-	else if ((*flags_struct).conversion == 2)
+	else if ((*flags_struct).conversion == LETTER)
 		count += ft_putchar_fd((char)va_arg(lst, int), *flags_struct);
-	else if ((*flags_struct).conversion == 4)
-		count += ft_putnbr(va_arg(lst, int), *flags_struct);
-	else if ((*flags_struct).conversion > 2 && (*flags_struct).conversion < 8)
+	else if ((*flags_struct).conversion == INTEGER)
+		count += ft_putnbr((long)va_arg(lst, int), *flags_struct);
+	else if ((*flags_struct).conversion >= PTR 
+		&& (*flags_struct).conversion <= HEX_MAJ)
 	{
-		tmp = (unsigned long)va_arg(lst, void *);
-		if ((*flags_struct).conversion == 3 || (*flags_struct).flags == HASH)
-			if (tmp)
+		if ((*flags_struct).flags == HASH)
+		{
+			if((*flags_struct).conversion == HEX_MAJ)
+				count += write(1, "0X", 2);
+			else
 				count += write(1, "0x", 2);
-		count += ft_putnbr(tmp, *flags_struct);
+		}
+		if ((*flags_struct).conversion == PTR)
+			count += ft_putnbr((long)va_arg(lst, void *), *flags_struct);
+		else
+			count += ft_putnbr(va_arg(lst, long), *flags_struct);
 	}
 	else
 		count += ft_putfloat(va_arg(lst, double), *flags_struct);
@@ -44,19 +50,19 @@ static size_t	conv(const char **fmt, va_list lst, t_flags *flags_struct)
 
 	count = 0;
 	if ((**fmt) == 's')
-		(*flags_struct).conversion = 1;
+		(*flags_struct).conversion = STRING;
 	else if ((**fmt) == 'c')
-		(*flags_struct).conversion = 2;
-	else if ((**fmt) == 'p')
-		(*flags_struct).conversion = 3;
+		(*flags_struct).conversion = LETTER;
 	else if ((**fmt) == 'd' || (**fmt) == 'i')
-		(*flags_struct).conversion = 4;
+		(*flags_struct).conversion = INTEGER;
+	else if ((**fmt) == 'p')
+		(*flags_struct).conversion = PTR;
 	else if ((**fmt) == 'u')
-		(*flags_struct).conversion = 5;
+		(*flags_struct).conversion = UNSIGNED;
 	else if ((**fmt) == 'x')
-		(*flags_struct).conversion = 6;
+		(*flags_struct).conversion = HEX_LOW;
 	else if ((**fmt) == 'X')
-		(*flags_struct).conversion = 7;
+		(*flags_struct).conversion = HEX_MAJ;
 	else if ((**fmt) == 'f' && *fmt++)
 		(*flags_struct).conversion = 8;
 	else if ((**fmt) == '%')
@@ -114,14 +120,15 @@ static size_t	flag_pars(const char **fmt, va_list lst, t_flags *flags_struct)
 }
 
 // n,base, upper, adress flag
-int	ft_printf(const char (*fmt), ...)
+int	ft_printf(const char *fmt, ...)
 {
 	va_list	lst;
 	size_t	count;
 	t_flags	flags_struct;
 
 	count = 0;
-	
+	if (!fmt)
+		return (-1);
 	va_start(lst, fmt);
 	while (*fmt)
 	{
@@ -138,13 +145,11 @@ int	ft_printf(const char (*fmt), ...)
 	va_end(lst);
 	return (count);
 }
-
-
+/*
 int main()
 {
-	int n1 = ft_printf(" %.3f \n", 42.1225);
-	int n2 =    printf(" %.3f \n", 42.1225);
+	int n1 = ft_printf("%0014.2X%020X%0002.X%000.5X\n", -1, 3, 30, -1);
+	int n2 =    printf("%0014.2X%020X%0002.X%000.5X\n", -1, 3, 30, -1);
 	   printf("n:%d\n",n1 );
 	    printf("n2:%d\n",n2 );
-}
-//test 0
+}*/
