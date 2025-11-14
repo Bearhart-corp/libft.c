@@ -13,108 +13,79 @@
 #include "ft_printf.h"
 #include <stdio.h>
 
-static size_t	long_len(long n, int base)
+static size_t	ft_putnbr_help(long n, char *buf)
 {
-	size_t	len;
+	size_t	count;
+	size_t		i;
+	char	tmp[64];
 
-	len = 0;
+	i = 0;
+	count = 0;
+	if (n == 0)
+	{
+		buf[count++] = '0';
+		return (count);
+	}
 	while (n > 0)
 	{
-		n /= base;
-		len++;
+		tmp[count++] = "0123456789"[n % 10];
+		n = n /10;
 	}
-	return (len);
+	while (i < count)
+	{
+		buf[i] = tmp[(count - 1) - i];
+		i++;
+	}
+	return (count);
 }
 
-static int helper(t_flags flags_struct, int *upper, long *n, size_t *count)
+size_t	ft_putnbr(long n, t_flags f)
 {
-	int	base;
-
-	if (flags_struct.conversion == HEX_LOW ||
-		flags_struct.conversion == HEX_MAJ ||
-		flags_struct.conversion == PTR)
-			base = 16;
-	else
-		base = 10;
-	if (*n < 0)
-		{
-			*count += write(1, "-", 1);
-			*n = -(*n);
-		}
-	if (flags_struct.conversion == HEX_MAJ)
-		*upper = 1;
-	else
-		*upper = 0;
-	return (base);
-}
-
-static size_t	ft_putnbr_help(long n, t_flags flags_struct, int base, int up)
-{
-	char	tmp;
 	size_t	count;
+	char	sign;
+	size_t	sign_len;
+	char	buf[64];
+	char	symb_pad;
+	size_t	pad;
 
 	count = 0;
-	if (n >= base)
-		count += ft_putnbr_help(n / base, flags_struct, base, up);
-	tmp = "0123456789abcdef"[n % base];
-	if (up)
-		tmp = ft_toupper(tmp);
-	count += write(1, &tmp, 1);
-	return (count);
-}
-
-size_t	ft_putnbr(long n, t_flags flags_struct)
-{
-	unsigned long	tmp;
-	size_t			count;
-	int				base;
-	int				upper;
-	char			temp;
-
-	upper = 0;
-	count = 0;
-	tmp = (unsigned long)n;
-	if (flags_struct.flags == SPACE)
-		temp = ' ';
-	else if (flags_struct.flags == ZEROS)
-		temp = '0';
-	if (flags_struct.conversion == PTR && !n)
-		return count += write(1, "(nil)", 5);
-	if ((flags_struct.flags & PLUS) && n >= 0)
-		count += write(1, "+", 1);
-	if (flags_struct.flags == SPACE && !(flags_struct.flags & PLUS) && n >= 0)
-		count += write(1, " ", 1);
-	base = helper(flags_struct, &upper, &n, &count);
-	if (flags_struct.width)
-		flags_struct.width -= long_len(n, base) - count;
-	if (n < 0 && (!(tmp & (tmp - 1))))
+	sign = 0;
+	sign_len = 1;
+	symb_pad = ' ';
+	if (n < 0)
 	{
-		if (!(flags_struct.flags & START_LEFT))
-			while (flags_struct.width--)
-				count += write(1, &temp, 1);
-		if (base == 16)
-			count += write(1, "8000000000000000", 16);
-		else
-			count += write(1, "9223372036854776000", 19);
-		if ((flags_struct.flags & START_LEFT))
-			while (flags_struct.width--)
-				count += write(1, " ", 1);
+		sign = '-';
+		n = -n;
+		sign_len = 1;
 	}
-	else
+	count += ft_putnbr_help(n, buf);
+	
+	if (!(f.flags & START_LEFT) && (f.flags & ZEROS) && (f.width - count) && sign != '-')
+		symb_pad = '0';
+	else if (f.flags & PLUS && sign != '-')
+		sign = '+';
+	else if (f.flags & SPACE && sign != '-')
+		sign = ' ';
+	else if (sign != '-')
+		sign_len = 0;
+	pad = f.width - (count + sign_len);
+	if (pad & 0x8000000000000000)
+		pad = 0;
+	f.width = pad;
+	if (f.flags & START_LEFT)
 	{
-		if (!(flags_struct.flags & START_LEFT) && flags_struct.width)
-			while (flags_struct.width--)
-				count += write(1, &temp, 1);
-		count += ft_putnbr_help(n, flags_struct, base, upper);
-		if ((flags_struct.flags & START_LEFT) && flags_struct.width)
-			while (flags_struct.width--)
-				count += write(1, &temp, 1);
+		if (sign_len)
+			write(1, &sign, 1);
+		write(1, buf, count);
 	}
-	return (count);
+	while (f.width-- && !(f.width & 0x8000000000000000))
+		count += write(1, &symb_pad, 1);
+	if (!(f.flags & START_LEFT))
+	{
+		if (sign_len)
+			write(1, &sign, 1);
+		write(1, buf, count - pad);
+	}
+	return (count + sign_len);
 }
-/*
-int main()
-{
-	size_t n = ft_putnbr(42, 1, 16, 1);
-	printf("\ntaille :%zu\n",n );
-}*/
+//"%10d", (int)-2147483648

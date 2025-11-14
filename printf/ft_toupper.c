@@ -10,11 +10,21 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "printf.h"
+#include "ft_printf.h"
 
 int	ft_toupper(int c)
 {
 	if (c >= 'a' && c <= 'z')
 		return (c - 32);
 	return (c);
+}
+
+void	ft_toupper_str(char *s)
+{
+	while (*s)
+	{
+		if (*s >= 'a' && *s <= 'z')
+			*s = *s - 32;
+		s++;
+	}
 }

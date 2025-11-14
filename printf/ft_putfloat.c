@@ -24,7 +24,7 @@ static int	power(char pow)
 	return (acc);
 }
 
-size_t	ft_putfloat(double n, t_flags flags_struct)
+size_t	ft_putfloat(double n, t_flags f)
 {
 	long	n_int;
 	size_t	count;
@@ -35,12 +35,12 @@ size_t	ft_putfloat(double n, t_flags flags_struct)
 		n = -n;
 		count += write(1, "-", 1);
 	}
-	n += (0.5 / power(flags_struct.prec));
+	n += (0.5 / power(f.prec));
 	n_int = (long)n;
-	count += ft_putnbr(n_int, flags_struct);
+	count += ft_putnbr(n_int, f);
 	count += write(1, ".", 1);
-	n = (n - n_int) * power(flags_struct.prec);
-	count += ft_putnbr(n, flags_struct);
+	n = (n - n_int) * power(f.prec);
+	count += ft_putnbr(n, f);
 	return (count);
 }
 /*

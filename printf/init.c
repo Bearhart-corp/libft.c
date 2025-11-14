@@ -1,20 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_tolower.c                                       :+:      :+:    :+:   */
+/*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tbelard <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/27 12:54:22 by tbelard           #+#    #+#             */
-/*   Updated: 2025/10/27 12:54:23 by tbelard          ###   ########.fr       */
+/*   Created: 2025/11/14 12:48:26 by tbelard           #+#    #+#             */
+/*   Updated: 2025/11/14 12:48:34 by tbelard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "printf.h"
+#include "ft_printf.h"
 
-int	ft_tolower(int c)
+void	init(t_flags *f)
 {
-	if (c >= 'A' && c <= 'Z')
-		return (c + 32);
-	return (c);
+	(*f).flags = 0;
+	(*f).width = 0;
+	(*f).prec = 0;
+	(*f).conversion = 0;
+	(*f).point = 0;
 }

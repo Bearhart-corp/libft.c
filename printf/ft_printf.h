@@ -37,13 +37,16 @@
 # define UNSIGNED 5
 # define HEX_LOW 6
 # define HEX_MAJ 7
+# define POINT 1
+//# define LONG_MAX 0xffffffffffffffff
 
 typedef struct s_flags
 {
-	char			flags;
+	unsigned char	flags;
 	size_t			width;
-	unsigned char	prec;
-	char			conversion;
+	int				prec;
+	unsigned char	conversion;
+	unsigned char	point;
 }	t_flags;
 
 int		ft_printf(const char *fmt, ...);
@@ -53,6 +56,10 @@ int		ft_toupper(int c);
 size_t	ft_strlen(const char *s);
 size_t	ft_putchar_fd(char c, t_flags flags_struct);
 size_t	ft_putnbr(long n, t_flags flags_struct);
-size_t	ft_putstr_fd(char *s, t_flags flags_struct);
+size_t  ft_putstr_fd(char *s, t_flags f);
+void	init(t_flags *f);
+size_t	Uputnbr(unsigned long n, t_flags f);
+void	ft_toupper_str(char *s);
+size_t	ft_putchar(char c);
 
 #endif

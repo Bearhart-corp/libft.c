@@ -20,9 +20,10 @@ SRC = ft_putchar_fd.c \
 	ft_putnbr_fd.c \
 	ft_putstr_fd.c \
 	ft_strlen.c \
-	ft_tolower.c \
 	ft_putfloat.c \
 	ft_toupper.c \
+	init.c \
+	ft_uPutnbr.c \
 	ft_printf.c
 
 OBJ = $(SRC:.c=.o)

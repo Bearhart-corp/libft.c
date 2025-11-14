@@ -12,23 +12,28 @@
 
 #include "ft_printf.h"
 
-size_t	ft_putchar_fd(char c, t_flags flags_struct)
+size_t	ft_putchar_fd(char c, t_flags f)
 {
 	int 	i;
 	int		largeur;
 
-	largeur = flags_struct.width;
+	largeur = f.width;
 	i = 0;
-	if (flags_struct.width)
+	if (f.width)
 	{
-		if (flags_struct.flags & START_LEFT)
+		if (f.flags & START_LEFT)
 			write(1, &c, 1);
 		while (++i < largeur)
 			write(1, " ", 1);
-		if (!(flags_struct.flags & START_LEFT))
+		if (!(f.flags & START_LEFT))
 			write(1, &c, 1);
 	}
 	else
 		i = write(1, &c, 1);
 	return (i);
+}
+
+size_t ft_putchar(char c)
+{
+	return (write(1, &c, 1));
 }

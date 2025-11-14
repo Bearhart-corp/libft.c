@@ -13,64 +13,33 @@
 #include "ft_printf.h"
 #include <stdio.h>
 
-size_t	ft_putstr_fd(char *s, t_flags flags_struct)
-{
-	size_t	count;
-	size_t	largeur;
-	int		accuracy;
-	char	sz;
+# define COUNT 0
+# define LEN 1
+# define PAD 2
 
-	if ((flags_struct.flags & ZEROS) && !(flags_struct.flags & START_LEFT))
-		sz = '0';
-	else
-		sz = 32;
-	largeur = 0;
-	accuracy = 0;
-	count = 0;
-	if (flags_struct.flags == SPACE)
-		count += write(1, " ", 1);
-	if (!s)
-	{
-		if (flags_struct.prec && flags_struct.prec < 6)
-			return (0);
-		else
-			return (count += write(1, "(null)", 6));
-	}
-	if (flags_struct.prec)
-		accuracy = flags_struct.prec;
-	if (flags_struct.width)
-	{
-		if (flags_struct.prec)
-			largeur = (flags_struct.width - accuracy) - count;
-		else
-			largeur = (flags_struct.width - ft_strlen(s) - count);
-	}
-	if (flags_struct.width)
-	{
-		if (flags_struct.flags & START_LEFT)
-		{
-			while ((*s && accuracy-- ))
-				count += write(1, s++, 1);
-			while (largeur--)
-				count += write(1, &sz, 1);
-		}
-		else
-		{
-			while (largeur--)
-				count += write(1, &sz, 1);
-			largeur = flags_struct.width - ft_strlen(s);
-			if (accuracy)
-				while ((*s && accuracy-- ) && largeur++ <= flags_struct.width)
-					count += write(1, s++, 1);
-			else
-				while ((*s) && largeur++ <= flags_struct.width)
-					count += write(1, s++, 1);
-		}
-	}
-	else
-		while (*s)
-			count += write(1, s++, 1);
-	return (count);
+size_t  ft_putstr_fd(char *s, t_flags f)
+{
+    size_t  t[3];
+
+    t[COUNT] = 0;
+    if (!s)
+        s = "(null)";
+    t[LEN] = ft_strlen(s);
+    if (f.point)
+    	if (f.prec < (int)t[LEN])
+			t[LEN] = (size_t)f.prec;
+    if (f.width > t[LEN])
+    	t[PAD] = (size_t)(f.width - t[LEN]);
+    else
+    	t[PAD] = 0;
+    if (!(f.flags & START_LEFT))// alignement droit
+        while (t[PAD]--)
+        	t[COUNT] += write(1, " ", 1);
+    t[COUNT] += write(1, s, t[LEN]);
+    if (f.flags & START_LEFT)// alignement gauche
+        while (t[PAD]--)
+        	t[COUNT] += write(1, " ", 1);
+    return (t[COUNT]);
 }
 
 /*1010 / 3 (*,/,-)
