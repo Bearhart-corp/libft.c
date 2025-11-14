@@ -117,12 +117,12 @@ size_t	ft_putnbr(long n, t_flags f)
 	int		left = (f.flags & START_LEFT) != 0;
 	int		zero_pad_width = (f.flags & ZEROS) && !left; /* (on ignore la précision ici) */
 	const char *sign_str = "";
+
+// DEPART 0 TROU DE BAL
 	size_t	sign_len = 0;
 
 	/* Sécurise le signe (évite les UB) */
-	long long v = (long long)n;
-	int neg = (v < 0);
-	unsigned long long u = neg ? (unsigned long long)(-v) : (unsigned long long)v;
+    ok
 
 	/* signe (+, ' ') seulement pour les signés et si pas négatif */
 	if (neg) { sign_str = "-"; sign_len = 1; }
@@ -132,7 +132,7 @@ size_t	ft_putnbr(long n, t_flags f)
 	/* chiffres */
 	size_t ndig = utoa_base(u, base, 0, buf);
 
-	/* padding calculé proprement */
+	/* padding  */
 	int pad; 
 	if (zero_pad_width) {
 		/* padding '0' → après le signe */
@@ -225,4 +225,23 @@ size_t	Uputnbr(unsigned long n, t_flags f)
 	count += putn(buf, ndig);
 	if (left)  while (pad--) count += putc(' ');
 	return count;
+}
+PRECISION/
+    size_t zeros = 0;
+    if (f.has_prec) {
+        if (f.prec == 0 && u == 0) ndig = 0;                /* %.0d et valeur 0 => rien */
+        zeros = (f.prec > (int)ndig) ? (size_t)(f.prec - (int)ndig) : 0;
+    }
+EN PLUS
+
+static size_t print_nil_with_width(t_flags f)
+{
+    const char *nil = "(nil)";
+    size_t L = 5, count = 0;
+    int left = (f.flags & START_LEFT) != 0;
+    int pad = f.width - (int)L; if (pad < 0) pad = 0;
+    if (!left) while (pad--) count += putc(' ');
+    count += putn(nil, L);
+    if (left)  while (pad--) count += putc(' ');
+    return count;
 }
