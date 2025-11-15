@@ -1,3 +1,8 @@
+note après relecture:
+
+il faut un fichier helper partagé entre les fonctions putnbr et uPutnbr
+
+les 2 ont les mêmes besoin et il faut bien segmenter, de plus les codes sont beaucoup trop long..
 
 Bug 7 – %p avec NULL et largeur : chaîne correcte mais valeur de retour fausse
 Symptôme :
