@@ -1,72 +1,27 @@
-Bug 1 – %p sans le préfixe 0x
-Bug 2 – %p avec (void *)-1 affiché en -1 au lieu de 0xffffffffffffffff
-tu dois toujours caster le void * en type non signé et jamais laisser la représentation
-signée intervenir.
-Bug 3 – Padding de largeur rempli avec des \0 au lieu d’espaces ' '
-Bug 4 – Largeur (width) qui boucle à l’infini → TIMEOUT sur %s et %p
-Origine probable (très classique) :
 
-Tu calcules pad = width - len dans un type non signé (size_t, unsigned int, etc.).
-
-Quand len > width, width - len underflow → énorme nombre positif →
-ta boucle de padding (while (pad--)) ne finit jamais.
-int pad = width - len;
-if (pad < 0)
-    pad = 0;
-Ou tester explicitement if (width > len) avant de boucler.
-Bug 5 – %s + largeur mal géré pour les NULL ((null))
-Origine probable :
-Tu traites le cas s == NULL en remplaçant par la chaîne (null)
-mais tu ne recalcules pas correctement la longueur
-quand tu appliques la largeur.
-Bug 6 – %p + largeur : mélange de deux bugs (0x manquant + padding en \0)
-Le 0x n’est jamais géré comme partie de la string à aligner/padder ;
-du coup même quand tu le rajouteras, il faudra le compter dans la longueur
-avant de calculer les espaces.
 Bug 7 – %p avec NULL et largeur : chaîne correcte mais valeur de retour fausse
 Symptôme :
 attendu : chaîne [the address is (nil)], len 23
 obtenu : exactement la même chaîne, mais retour = 20
 Bug 8 – %d / %i + largeur : \0 insérés dans le nombre lui-même
-Bug 9 – %d / %i avec INT_MIN mal géré (overflow sur -n)
-Pour les 0 a tous les coups j'ai dû confondre 0 avec '0' #chevre
-
-Bug 10 – %d / %i / %p + largeur : TIMEOUT sur certains cas extrêmes
-pad = width - len dans un type non signé → underflow → boucle infinie.
 
 Bug 11 – Valeur de retour globalement incorrecte dès qu’il y a largeur / (nil) / padding
 
 
 annexe: ft_printf.c :
-%p doit toujours afficher 0x (sauf (nil) pour NULL) et utiliser base 16 minuscule.
-Le préfixe ne dépend pas de #.
 
 # pour %x/%X : préfixe 0x/0X uniquement si la valeur ≠ 0.
-%p : tu fais va_arg(lst, void*) puis (long).
-Il faut toujours caster vers un entier non signé de largeur pointeur, idéalement uintptr_t.
-→ uintptr_t addr = (uintptr_t)va_arg(lst, void *);
 
- Mieux : une fonction dédiée print_uint_base(value, base, upper)
-qui retourne le nombre de bytes écrits, et gère proprement le préfixe via les flags.
-
-ZEROS vs START_LEFT : if ((flags & START_LEFT) != 1)
-est faux pour un masque de bits. Il faut tester if (!(flags & START_LEFT))....
 
 Précision :
 
 Un point '.' sans chiffre → précision 0
 (sauf %f standard où l’absence de . implique 6, mais avec . seul c’est 0).
 
-Pour %s, précision = max de caractères à imprimer.
-
 Pour les entiers, précision → nombre minimal de chiffres 
 (zéros en tête), et annule l’effet de 0 (flag).
 
 Cas spécial %.0d avec 0 → imprime rien (sauf si width → espaces uniquement).
-
-Dans conv, tu fais exceptionnellement (*fmt)++ pour 'f' seulement : incohérent.
-Stratégie saine : toujours consommer le spécificateur dans conv après l’avoir reconnu,
-puis appeler print_fmt.
 
 Flags non arbitrés
 
