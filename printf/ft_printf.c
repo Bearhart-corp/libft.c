@@ -136,8 +136,9 @@ int	ft_printf(const char *fmt, ...)
 /*
 int main()
 {
-	int n1 = ft_printf("%d %d\n", 2147483647, (int)-2147483648);
-	int n2 =    printf("%d %d\n", 2147483647, (int)-2147483648);
+	//char c;
+	int n1 = ft_printf("%.0d\n", 420000);
+	int n2 =    printf("%.0d\n", 420000);
 	printf("n:%d\n",n1 );
 	printf("n2:%d\n",n2 );
 }*/

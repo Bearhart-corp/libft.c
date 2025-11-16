@@ -11,118 +11,48 @@
 /* ************************************************************************** */
 
 #include "ft_printf.h"
-#include <stdio.h>
-static size_t	h(unsigned long n, unsigned int base, char *buf, t_flags f)
-{
-	size_t	count;
-	size_t		i;
-	char	tmp[64];
 
-	i = -1;
-	count = 0;
-	if (n == 0)
-	{
-		buf[count++] = '0';
-		return (count);
-	}
-	while (n > 0)
-	{
-		tmp[count++] = "0123456789abcdef"[n % base];
-		n = n / base;
-	}
-	if (f.conversion == PTR || f.flags & HASH)
-	{
-		tmp[count++] = 'x';
-		tmp[count++] = '0';
-	}
-	while (++i < count)
-		buf[i] = tmp[(count - 1) - i];
-	return (count);
-}
-
-static size_t ptr_zero(t_flags f)
-{
-	int 	pad;
-	size_t	L;
-	char	*nil;
-	size_t	count;
-
-	count = 0;
-	{
-		nil = "(nil)";
-		L = 5;
-		count = 0;
-		if (f.width > L)
-			pad = f.width - L;
-		else
-			pad = 0;
-		if (!(f.flags & START_LEFT))
-			while (pad--)
-				count += write(1, " ", 1);
-		count += write(1, nil, L);
-		if (f.flags & START_LEFT)
-			while (pad--)
-				count += write(1, " ", 1);
-		return (count);
-	}
-}
 
 size_t	Uputnbr(unsigned long n, t_flags f)
 {
-	size_t	count;
-	int		base;
-	int		upper;
-	char	sign;
-	size_t	sign_len;
-	char	buf[64];
-	char	symb_pad;
-	size_t	pad;
+	nbr		s;
+	int		pad_prec;
 
-	sign = 0;
-	symb_pad = ' ';
-	upper = (f.conversion == HEX_MAJ);
-	count = 0;
-	sign_len = 1;
-
-	if (f.conversion == UNSIGNED)
-		base = 10;
-	else
-		base = 16;
+	init_nbr(&s, f, n);
 	if (f.conversion == PTR && n == 0)
-		return (count+= ptr_zero(f));	
-
-	count += h(n, base, buf, f);
-
-	if (!(f.flags & START_LEFT) && (f.flags & ZEROS) && (f.width - count))
-		symb_pad = '0';
-	else if (f.flags & PLUS)
-		sign = '+';
-	else if (f.flags & SPACE)
-		sign = ' ';
+		return (s.count+= ptr_zero(f));
+	if (s.upper && f.conversion != PTR)
+		ft_toupper_str(s.buf);
+	s.z = f.width - (int)(s.sign_len + s.n_digit);
+	if (s.z < 0)
+		s.z = 0;
+	if (f.point)
+		pad_prec = f.prec - s.n_digit;
 	else
-		sign_len = 0;
-
-	pad = f.width - (count + sign_len);
-	if (pad & 0x8000000000000000)
-		pad = 0;
-	f.width = pad;
-
-	if (upper)
-		ft_toupper_str(buf);
-	if ((f.flags & START_LEFT))
+		pad_prec = 0;
+	if (!(s.is_left))
 	{
-		if (sign_len)
-			write(1, &sign, 1);
-		write(1, buf, count);
+		while (s.z-- > 0)
+			s.count += write(1, &s.sym_pad, 1);
+		while (f.point && pad_prec-- > 0)
+			s.count += write(1, "0", 1);
+		s.count += write(1, &s.sign, s.sign_len);
+		if (!f.point || f.prec)
+			s.count += write(1, s.buf, s.n_digit);
+		else if (f.point && !(f.prec) && n > 0)
+			s.count += write(1, s.buf, s.n_digit);
 	}
-	while (f.width-- && !(f.width & 0x8000000000000000))
-		count += write(1, &symb_pad, 1);
-	if (!(f.flags & START_LEFT))
+	if (s.is_left)
 	{
-		if (sign_len)
-			write(1, &sign, 1);
-		write(1, buf, count - pad);
+		while (f.point && pad_prec-- > 0)
+			s.count += write(1, "0", 1);
+		s.count += write(1, &s.sign, s.sign_len);
+		if (!f.point || f.prec)
+			s.count += write(1, s.buf, s.n_digit);
+		else if (f.point && !(f.prec) && n > 0)
+			s.count += write(1, s.buf, s.n_digit);
+		while (s.z-- > 0)
+			s.count += write(1, &s.sym_pad, 1);
 	}
-	return (count + sign_len);
+	return (s.count);
 }
-//"%05X", -1

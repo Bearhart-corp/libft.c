@@ -16,6 +16,8 @@
 # include <unistd.h>
 # include <stdarg.h>
 # include <limits.h>
+///WARNING !!!
+# include <stdio.h>
 
 # define SIZE_MAX -1
 # define UPPER 1
@@ -38,7 +40,8 @@
 # define HEX_LOW 6
 # define HEX_MAJ 7
 # define POINT 1
-//# define LONG_MAX 0xffffffffffffffff
+
+////////////// struct format
 
 typedef struct s_flags
 {
@@ -49,17 +52,60 @@ typedef struct s_flags
 	unsigned char	point;
 }	t_flags;
 
+////////////// struct nombre
+
+typedef struct nombre
+{
+	size_t	count;
+	char	sign;
+	size_t	sign_len;
+	char	buf[64];
+	int		pad;
+	int		base;
+	int		upper;
+	int		is_hex;
+	int		is_left;
+	int		zero_pad_width;
+	size_t	n_digit;
+	char	*prefix;
+	size_t	prefix_len;
+	int		z;
+	int		zero;
+	char	sym_pad;
+}	nbr;
+
+////////////// main
+
 int		ft_printf(const char *fmt, ...);
+
+////////////// printers.char
+
+size_t	ft_putchar_fd(char c, t_flags flags_struct);
+size_t  ft_putstr_fd(char *s, t_flags f);
+size_t	ft_putchar(char c);
+
+////////////// printers.nbr
+
 size_t	ft_putfloat(double n, t_flags flag_struct);
-int		ft_tolower(int c);
+size_t	ft_putnbr(long n, t_flags flags_struct);
+size_t	Uputnbr(unsigned long n, t_flags f);
+
+////////////// petits helper
+
 int		ft_toupper(int c);
 size_t	ft_strlen(const char *s);
-size_t	ft_putchar_fd(char c, t_flags flags_struct);
-size_t	ft_putnbr(long n, t_flags flags_struct);
-size_t  ft_putstr_fd(char *s, t_flags f);
-void	init(t_flags *f);
-size_t	Uputnbr(unsigned long n, t_flags f);
 void	ft_toupper_str(char *s);
-size_t	ft_putchar(char c);
+
+////////////// putnbr helper
+
+size_t	h(unsigned long n, int base, char *buf, t_flags f);
+size_t	ft_putnbr_help(long n, char *buf);
+size_t	ptr_zero(t_flags f);
+
+////////////// init struct
+
+void	init_nbr_int(nbr *s, t_flags f, int neg, long n);
+void	init(t_flags *f);
+void	init_nbr(nbr *s, t_flags f, unsigned long n);
 
 #endif

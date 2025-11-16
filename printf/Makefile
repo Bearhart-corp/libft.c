@@ -24,6 +24,7 @@ SRC = ft_putchar_fd.c \
 	ft_toupper.c \
 	init.c \
 	ft_uPutnbr.c \
+	ft_help_putnbr.c \
 	ft_printf.c
 
 OBJ = $(SRC:.c=.o)

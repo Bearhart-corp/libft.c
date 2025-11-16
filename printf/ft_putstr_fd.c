@@ -19,27 +19,35 @@
 
 size_t  ft_putstr_fd(char *s, t_flags f)
 {
-    size_t  t[3];
+    int  t[3];
 
     t[COUNT] = 0;
+    t[LEN] = 0;
     if (!s)
+    {
         s = "(null)";
-    t[LEN] = ft_strlen(s);
+         if (f.point && f.prec < 6)
+			t[LEN] = 0;
+		else
+			t[LEN] = 6;
+    }
+    else
+    	t[LEN] = ft_strlen(s);
     if (f.point)
     	if (f.prec < (int)t[LEN])
 			t[LEN] = (size_t)f.prec;
-    if (f.width > t[LEN])
+    if (f.width > (size_t)t[LEN])
     	t[PAD] = (size_t)(f.width - t[LEN]);
     else
     	t[PAD] = 0;
     if (!(f.flags & START_LEFT))// alignement droit
-        while (t[PAD]--)
+        while (t[PAD]-- > 0)
         	t[COUNT] += write(1, " ", 1);
     t[COUNT] += write(1, s, t[LEN]);
     if (f.flags & START_LEFT)// alignement gauche
-        while (t[PAD]--)
+        while (t[PAD]-- > 0)
         	t[COUNT] += write(1, " ", 1);
-    return (t[COUNT]);
+    return ((size_t)t[COUNT]);
 }
 
 /*1010 / 3 (*,/,-)

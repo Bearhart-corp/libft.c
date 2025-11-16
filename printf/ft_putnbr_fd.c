@@ -11,81 +11,43 @@
 /* ************************************************************************** */
 
 #include "ft_printf.h"
-#include <stdio.h>
-
-static size_t	ft_putnbr_help(long n, char *buf)
-{
-	size_t	count;
-	size_t		i;
-	char	tmp[64];
-
-	i = 0;
-	count = 0;
-	if (n == 0)
-	{
-		buf[count++] = '0';
-		return (count);
-	}
-	while (n > 0)
-	{
-		tmp[count++] = "0123456789"[n % 10];
-		n = n /10;
-	}
-	while (i < count)
-	{
-		buf[i] = tmp[(count - 1) - i];
-		i++;
-	}
-	return (count);
-}
 
 size_t	ft_putnbr(long n, t_flags f)
 {
-	size_t	count;
-	char	sign;
-	size_t	sign_len;
-	char	buf[64];
-	char	symb_pad;
-	size_t	pad;
+	nbr		s;
+	int		neg;
+	int		pad_prec;
 
-	count = 0;
-	sign = 0;
-	sign_len = 1;
-	symb_pad = ' ';
-	if (n < 0)
-	{
-		sign = '-';
+	neg = (n < 0);
+	if (neg)
 		n = -n;
-		sign_len = 1;
-	}
-	count += ft_putnbr_help(n, buf);
+	init_nbr_int(&s, f, neg, n);
+	ft_putnbr_help(n, s.buf);
 	
-	if (!(f.flags & START_LEFT) && (f.flags & ZEROS) && (f.width - count) && sign != '-')
-		symb_pad = '0';
-	else if (f.flags & PLUS && sign != '-')
-		sign = '+';
-	else if (f.flags & SPACE && sign != '-')
-		sign = ' ';
-	else if (sign != '-')
-		sign_len = 0;
-	pad = f.width - (count + sign_len);
-	if (pad & 0x8000000000000000)
-		pad = 0;
-	f.width = pad;
-	if (f.flags & START_LEFT)
-	{
-		if (sign_len)
-			write(1, &sign, 1);
-		write(1, buf, count);
-	}
-	while (f.width-- && !(f.width & 0x8000000000000000))
-		count += write(1, &symb_pad, 1);
-	if (!(f.flags & START_LEFT))
-	{
-		if (sign_len)
-			write(1, &sign, 1);
-		write(1, buf, count - pad);
-	}
-	return (count + sign_len);
+	if (f.point)
+		pad_prec = f.prec - s.n_digit;
+	else
+		pad_prec = 0;
+	s.z = f.width - (int)(s.sign_len + s.n_digit + pad_prec);
+	if (s.z < 0)
+		s.z = 0;
+	if (!(s.is_left))
+		while (s.z--)
+			s.count += write(1, &s.sym_pad, 1);
+	s.count += write(1, &s.sign, s.sign_len);
+	while (f.point && pad_prec-- > 0)
+		s.count += write(1, "0", 1);
+	if (!f.point || f.prec || s.z-- > 0)
+		s.count += write(1, s.buf, s.n_digit);
+	else if ((f.point && !(f.prec)) && (n > 0 s.z-- > 0))
+		s.count += write(1, s.buf, s.n_digit);
+	if (s.is_left)
+		while (s.z--)
+			s.count += write(1, &s.sym_pad, 1);
+	return (s.count);
 }
-//"%10d", (int)-2147483648
+/*
+printf("c:%zu\n n_d:%zu\n pre:%zu\n s_len:%zu\n", s.count, s.n_digit, s.prefix_len, s.sign_len);
+printf("sign:%c\n, prefix: %s\n, pad: %d\n, base; %d\n, upper: %d\n, hex: %d\n",s.sign, s.prefix,s.pad, s.base, s.upper, s.is_hex);
+printf("left: %d\n, zeropaas : %d \n, z: %d\n, zero: %d\n",s.is_left, s.zero_pad_width, s.z , s.zero );
+*/
