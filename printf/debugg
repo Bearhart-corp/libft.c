@@ -1,69 +1,1133 @@
-note après relecture:
+basic test:
+  1.OK
+%c basic:
+  2.OK 3.OK 4.OK 5.OK 6.OK 7.OK 8.OK 9.OK 10.OK 11.OK
+%s basic:
+  12.OK 13.OK 14.OK 15.OK 16.OK 17.OK 18.OK 19.OK 20.OK 21.OK 22.OK 23.OK 24.OK 25.OK 26.OK 27.OK 28.OK 29.OK 30.OK 31.OK 32.OK 33.OK
+%p basic:
+  34.OK 35.OK 36.OK 37.OK 38.OK 39.OK 40.OK 41.OK 42.OK 43.OK
+%d basic:
+  44.OK 45.OK 46.OK 47.OK 48.OK 49.OK 50.OK 51.OK 52.OK 53.OK
+%i basic:
+  54.OK 55.OK 56.OK 57.OK 58.OK 59.OK
+%u basic:
+  60.OK 61.OK 62.OK 63.OK 64.OK 65.OK 66.OK 67.OK
+%x basic:
+  68.OK 69.OK 70.OK 71.OK 72.OK 73.OK 74.OK 75.OK 76.OK 77.OK 78.OK
+%X basic:
+  79.OK 80.OK 81.OK 82.OK 83.OK 84.OK 85.OK 86.OK 87.OK 88.OK 89.OK
+%% basic:
+  90.OK 91.OK 92.OK 93.OK 94.OK 95.OK
+mix:
+  96.OK 97.OK 98.OK 99.OK 100.OK 101.OK
+%c and widths:
+  102.OK 103.OK 104.OK 105.OK 106.OK 107.OK 108.OK 109.OK 110.OK
+%s and widths:
+  111.OK 112.OK 113.OK 114.OK 115.OK 116.OK 117.OK 118.OK 119.OK 120.OK 121.OK 122.OK 123.OK 124.OK 125.OK 126.OK 127.OK 128.OK 129.OK 130.OK
+%p and widths:
+  131.OK 132.OK 133.OK 134.OK 135.OK 136.OK 137.OK 138.OK 139.OK 140.OK 141.OK 142.OK 143.OK 144.OK 145.OK 146.OK 147.OK 148.OK 149.OK 150.OK 151.OK
+%d and widths:
+  152.OK 153.OK 154.OK 155.OK 156.OK 157.OK 158.OK 159.OK 160.OK 161.OK 162.OK 163.OK 164.OK 165.OK 166.OK 167.OK 168.OK 169.OK 170.OK
+%i and widths:
+  171.OK 172.OK 173.OK 174.OK 175.OK 176.OK 177.OK 178.OK 179.OK 180.OK 181.OK 182.OK 183.OK 184.OK 185.OK 186.OK 187.OK 188.OK 189.OK
+%u and widths:
+  190.OK 191.OK 192.OK 193.OK 194.OK 195.OK 196.OK 197.OK 198.OK 199.OK 200.OK 201.OK
+%x and widths:
+  202.OK 203.OK 204.OK 205.OK 206.OK 207.OK 208.OK 209.OK 210.OK 211.OK 212.OK 213.OK 214.OK 215.OK 216.OK 217.OK 218.OK 219.OK 220.OK 221.OK 222.OK
+%X and widths:
+  223.OK 224.OK 225.OK 226.OK 227.OK 228.OK 229.OK 230.OK 231.OK 232.OK 233.OK 234.OK 235.OK 236.OK 237.OK 238.OK 239.OK 240.OK 241.OK 242.OK 243.OK
+%s and precisions:
+  244.OK 245.OK 246.OK 247.OK 248.OK 249.OK 250.OK 251.OK 252.OK 253.OK 254.OK 255.OK 256.OK 257.OK 258.OK 259.OK 260.OK 261.OK 262.OK 263.OK 264.OK 265.OK 266.OK 267.OK 268.OK 269.OK 270.OK 271.OK 272.OK
+%d and precisions:
+  273.OK 274.OK 275.OK 276.OK
+  277.KO (Wrong return)
+        Expected: [420000], return: 6
+        Got:      [], return: 0
+     You can rerun this test with sh test 277
+     The function was called like this:
+   ft_printf("%.0d", 420000);
+278.OK 279.OK 280.OK 281.OK 282.OK 283.OK 284.OK 285.OK 286.OK 287.OK 288.OK 289.OK 290.OK 291.OK 292.OK
+  293.KO (Wrong output) (Wrong return)
+        Expected: [2], return: 1
+        Got:      [], return: 0
+     You can rerun this test with sh test 293
+     The function was called like this:
+   ft_printf("%.0d", 2);
 
-il faut un fichier helper partagé entre les fonctions putnbr et uPutnbr
+  294.KO (Wrong output) (Wrong return)
+        Expected: [2147483647], return: 10
+        Got:      [], return: 0
+     You can rerun this test with sh test 294
+     The function was called like this:
+   ft_printf("%.0d", 2147483647);
+295.OK
+  296.KO (Wrong output) (Wrong return)
+        Expected: [10], return: 2
+        Got:      [], return: 0
+     You can rerun this test with sh test 296
+     The function was called like this:
+   ft_printf("%.0d", 10);
 
-les 2 ont les mêmes besoin et il faut bien segmenter, de plus les codes sont beaucoup trop long..
+  297.KO (Wrong output) (Wrong return)
+        Expected: [10], return: 2
+        Got:      [], return: 0
+     You can rerun this test with sh test 297
+     The function was called like this:
+   ft_printf("%.d", 10);
+298.OK 299.OK 300.OK 301.OK
+  302.KO (Wrong output) (Wrong return)
+        Expected: [Bla 127i bla 00042sbla bla 1023x bla ], return: 37
+        Got:      [Bla 127i bla 00042sbla bla x bla ], return: 33
+     You can rerun this test with sh test 302
+     The function was called like this:
+   ft_printf("Bla %.2di bla %.5dsbla bla %.dx bla %.d", 127, 42, 1023, 0);
 
-Bug 7 – %p avec NULL et largeur : chaîne correcte mais valeur de retour fausse
-Symptôme :
-attendu : chaîne [the address is (nil)], len 23
-obtenu : exactement la même chaîne, mais retour = 20
-Bug 8 – %d / %i + largeur : \0 insérés dans le nombre lui-même
+  303.KO (Wrong output) (Wrong return)
+        Expected: [01270000000000000000001023-21474836481-2147483648], return: 49
+        Got:      [01270000000000000000001023--], return: 28
+     You can rerun this test with sh test 303
+     The function was called like this:
+   ft_printf("%.4d%.2d%.20d%.0d%.0d%.d%.d%.d", 127, 0, 1023, 0, (int)-2147483648, 0, 1, (int)-2147483648);
 
-Bug 11 – Valeur de retour globalement incorrecte dès qu’il y a largeur / (nil) / padding
+%i and precisions:
+  304.OK 305.OK 306.OK 307.OK 308.OK
+  309.KO (Wrong return)
+        Expected: [420000], return: 6
+        Got:      [], return: 0
+     You can rerun this test with sh test 309
+     The function was called like this:
+   ft_printf("%.0i", 420000);
+310.OK 311.OK 312.OK 313.OK 314.OK 315.OK 316.OK 317.OK 318.OK 319.OK 320.OK 321.OK 322.OK 323.OK 324.OK
+  325.KO (Wrong output) (Wrong return)
+        Expected: [2], return: 1
+        Got:      [], return: 0
+     You can rerun this test with sh test 325
+     The function was called like this:
+   ft_printf("%.0i", 2);
 
+  326.KO (Wrong output) (Wrong return)
+        Expected: [2147483647], return: 10
+        Got:      [], return: 0
+     You can rerun this test with sh test 326
+     The function was called like this:
+   ft_printf("%.0i", 2147483647);
+327.OK
+  328.KO (Wrong output) (Wrong return)
+        Expected: [10], return: 2
+        Got:      [], return: 0
+     You can rerun this test with sh test 328
+     The function was called like this:
+   ft_printf("%.0i", 10);
 
-annexe: ft_printf.c :
+  329.KO (Wrong output) (Wrong return)
+        Expected: [10], return: 2
+        Got:      [], return: 0
+     You can rerun this test with sh test 329
+     The function was called like this:
+   ft_printf("%.i", 10);
+330.OK 331.OK 332.OK 333.OK
+  334.KO (Wrong output) (Wrong return)
+        Expected: [Bla 127i bla 00042sbla bla 1023x bla ], return: 37
+        Got:      [Bla 127i bla 00042sbla bla x bla ], return: 33
+     You can rerun this test with sh test 334
+     The function was called like this:
+   ft_printf("Bla %.2ii bla %.5isbla bla %.ix bla %.i", 127, 42, 1023, 0);
 
-# pour %x/%X : préfixe 0x/0X uniquement si la valeur ≠ 0.
+  335.KO (Wrong output) (Wrong return)
+        Expected: [01270000000000000000001023-21474836481-2147483648], return: 49
+        Got:      [01270000000000000000001023--], return: 28
+     You can rerun this test with sh test 335
+     The function was called like this:
+   ft_printf("%.4i%.2i%.20i%.0i%.0i%.i%.i%.i", 127, 0, 1023, 0, (int)-2147483648, 0, 1, (int)-2147483648);
 
+%u and precisions:
+  336.OK 337.OK 338.OK 339.OK 340.OK 341.OK 342.OK 343.OK 344.OK 345.OK 346.OK 347.OK 348.OK 349.OK 350.OK 351.OK 352.OK 353.OK 354.OK 355.OK 356.OK 357.OK 358.OK 359.OK 360.OK 361.OK 362.OK 363.OK 364.OK 365.OK 366.OK
+%x and precisions:
+  367.OK 368.OK 369.OK 370.OK 371.OK 372.OK 373.OK 374.OK 375.OK 376.OK 377.OK 378.OK 379.OK 380.OK 381.OK 382.OK 383.OK 384.OK 385.OK 386.OK 387.OK 388.OK 389.OK 390.OK 391.OK 392.OK 393.OK 394.OK 395.OK 396.OK 397.OK 398.OK 399.OK
+%X and precisions:
+  400.OK 401.OK 402.OK 403.OK 404.OK 405.OK 406.OK 407.OK 408.OK 409.OK 410.OK 411.OK 412.OK 413.OK 414.OK 415.OK 416.OK 417.OK 418.OK 419.OK 420.OK 421.OK 422.OK 423.OK 424.OK 425.OK 426.OK 427.OK 428.OK 429.OK 430.OK 431.OK 432.OK
+%c, widths and -:
+  433.OK 434.OK 435.OK 436.OK 437.OK 438.OK 439.OK 440.OK 441.OK 442.OK
+%s, widths, precisions and -:
+  443.OK 444.OK 445.OK 446.OK 447.OK 448.OK
+%p, widths and -:
+  449.OK 450.OK 451.OK 452.OK 453.OK 454.OK 455.OK
+%d, widths, precisions and -:
+  456.OK 457.OK 458.OK 459.OK 460.OK 461.OK 462.OK 463.OK 464.OK 465.OK 466.OK 467.OK 468.OK 469.OK 470.OK 471.OK 472.OK 473.OK 474.OK 475.OK 476.OK 477.OK 478.OK 479.OK 480.TIMEOUT!
+     You can rerun this test with sh test 480
+     The function was called like this:
+   ft_printf("%-.d", 0);
+481.OK 482.OK 483.OK 484.OK 485.OK 486.OK 487.OK 488.OK 489.OK 490.OK 491.TIMEOUT!
+     You can rerun this test with sh test 491
+     The function was called like this:
+   ft_printf("%-1.0d", -10);
+492.OK 493.OK 494.OK 495.OK
+  496.KO (Wrong output)
+        Expected: [          ], return: 10
+        Got:      [0         ], return: 10
+     You can rerun this test with sh test 496
+     The function was called like this:
+   ft_printf("%-10.d", 0);
+497.OK 498.OK 499.OK 500.OK 501.OK 502.OK
+  503.KO (Wrong output) (Wrong return)
+        Expected: [2147483647], return: 10
+        Got:      [2147483647     ], return: 15
+     You can rerun this test with sh test 503
+     The function was called like this:
+   ft_printf("%-10.5d", 2147483647);
 
-Précision :
+  504.KO (Wrong output)
+        Expected: [               ], return: 15
+        Got:      [0              ], return: 15
+     You can rerun this test with sh test 504
+     The function was called like this:
+   ft_printf("%-15.d", 0);
+505.OK 506.OK 507.OK 508.OK 509.OK 510.OK
+  511.KO (Wrong output) (Wrong return)
+        Expected: [2147483647     ], return: 15
+        Got:      [2147483647          ], return: 20
+     You can rerun this test with sh test 511
+     The function was called like this:
+   ft_printf("%-15.5d", 2147483647);
+512.OK 513.OK 514.OK 515.OK 516.OK
+%i, widths, precisions and -:
+  517.OK 518.OK 519.OK 520.OK 521.OK 522.OK 523.OK 524.OK 525.OK 526.OK 527.OK 528.OK 529.OK 530.OK 531.OK 532.OK 533.OK 534.OK 535.OK 536.OK 537.OK 538.OK 539.OK 540.OK 541.TIMEOUT!
+     You can rerun this test with sh test 541
+     The function was called like this:
+   ft_printf("%-.i", 0);
+542.OK 543.OK 544.OK 545.OK 546.OK 547.OK 548.OK 549.OK 550.OK 551.OK 552.TIMEOUT!
+     You can rerun this test with sh test 552
+     The function was called like this:
+   ft_printf("%-1.0i", -10);
+553.OK 554.OK 555.OK 556.OK
+  557.KO (Wrong output)
+        Expected: [          ], return: 10
+        Got:      [0         ], return: 10
+     You can rerun this test with sh test 557
+     The function was called like this:
+   ft_printf("%-10.i", 0);
+558.OK 559.OK 560.OK 561.OK 562.OK 563.OK
+  564.KO (Wrong output) (Wrong return)
+        Expected: [2147483647], return: 10
+        Got:      [2147483647     ], return: 15
+     You can rerun this test with sh test 564
+     The function was called like this:
+   ft_printf("%-10.5i", 2147483647);
 
-Un point '.' sans chiffre → précision 0
-(sauf %f standard où l’absence de . implique 6, mais avec . seul c’est 0).
+  565.KO (Wrong output)
+        Expected: [               ], return: 15
+        Got:      [0              ], return: 15
+     You can rerun this test with sh test 565
+     The function was called like this:
+   ft_printf("%-15.i", 0);
+566.OK 567.OK 568.OK 569.OK 570.OK 571.OK
+  572.KO (Wrong output) (Wrong return)
+        Expected: [2147483647     ], return: 15
+        Got:      [2147483647          ], return: 20
+     You can rerun this test with sh test 572
+     The function was called like this:
+   ft_printf("%-15.5i", 2147483647);
+573.OK 574.OK 575.OK 576.OK 577.OK
+%u, widths, precisions and -:
+  578.OK 579.OK 580.OK 581.OK 582.OK 583.OK 584.OK 585.OK 586.OK 587.OK 588.OK 589.OK 590.OK 591.OK 592.OK 593.OK 594.OK 595.OK 596.OK 597.OK 598.OK 599.OK 600.OK 601.OK 602.OK 603.OK 604.OK 605.OK 606.OK 607.OK 608.OK 609.OK 610.OK 611.OK 612.OK 613.OK 614.OK 615.OK 616.OK 617.OK
+  618.KO (Wrong output) (Wrong return)
+        Expected: [          ], return: 10
+        Got:      [         ], return: 9
+     You can rerun this test with sh test 618
+     The function was called like this:
+   ft_printf("%-10.u", 0);
 
-Pour les entiers, précision → nombre minimal de chiffres 
-(zéros en tête), et annule l’effet de 0 (flag).
+  619.KO (Wrong output) (Wrong return)
+        Expected: [0000000001], return: 10
+        Got:      [0000000001         ], return: 19
+     You can rerun this test with sh test 619
+     The function was called like this:
+   ft_printf("%-10.10u", 1);
 
-Cas spécial %.0d avec 0 → imprime rien (sauf si width → espaces uniquement).
+  620.KO (Wrong output) (Wrong return)
+        Expected: [00010     ], return: 10
+        Got:      [00010        ], return: 13
+     You can rerun this test with sh test 620
+     The function was called like this:
+   ft_printf("%-10.5u", 10);
+621.OK
+  622.KO (Wrong output) (Wrong return)
+        Expected: [05000     ], return: 10
+        Got:      [05000      ], return: 11
+     You can rerun this test with sh test 622
+     The function was called like this:
+   ft_printf("%-10.5u", 5000);
+623.OK 624.OK 625.OK
+  626.KO (Wrong output) (Wrong return)
+        Expected: [               ], return: 15
+        Got:      [              ], return: 14
+     You can rerun this test with sh test 626
+     The function was called like this:
+   ft_printf("%-15.u", 0);
 
-Flags non arbitrés
+  627.KO (Wrong output) (Wrong return)
+        Expected: [0000000001     ], return: 15
+        Got:      [0000000001              ], return: 24
+     You can rerun this test with sh test 627
+     The function was called like this:
+   ft_printf("%-15.10u", 1);
 
-+ vs espace : + prime sur espace.
+  628.KO (Wrong output) (Wrong return)
+        Expected: [00010          ], return: 15
+        Got:      [00010             ], return: 18
+     You can rerun this test with sh test 628
+     The function was called like this:
+   ft_printf("%-15.5u", 10);
+629.OK
+  630.KO (Wrong output) (Wrong return)
+        Expected: [05000          ], return: 15
+        Got:      [05000           ], return: 16
+     You can rerun this test with sh test 630
+     The function was called like this:
+   ft_printf("%-15.5u", 5000);
+631.OK
+  632.KO (Wrong output) (Wrong return)
+        Expected: [000004294967295], return: 15
+        Got:      [000004294967295     ], return: 20
+     You can rerun this test with sh test 632
+     The function was called like this:
+   ft_printf("%-15.15u", -1);
+633.OK
+  634.KO (Wrong output) (Wrong return)
+        Expected: [000034   56         -u5007], return: 26
+        Got:      [00003   4   56         -u5007], return: 29
+     You can rerun this test with sh test 634
+     The function was called like this:
+   ft_printf("%-4.5u%u%4u%-10u-u5%-.3u", 3, 4, 5, 6, 7);
+635.OK 636.OK 637.OK 638.OK
+%x, widths, precisions and -:
+  639.OK 640.OK 641.OK 642.OK 643.OK 644.OK 645.OK 646.OK 647.OK 648.OK 649.OK 650.OK 651.OK 652.OK 653.OK 654.OK 655.OK 656.OK 657.OK 658.OK 659.OK 660.OK 661.OK 662.OK 663.OK 664.OK 665.OK 666.OK 667.OK 668.OK 669.OK 670.OK 671.OK 672.OK 673.OK 674.OK 675.OK 676.OK 677.OK 678.OK
+  679.KO (Wrong output) (Wrong return)
+        Expected: [          ], return: 10
+        Got:      [         ], return: 9
+     You can rerun this test with sh test 679
+     The function was called like this:
+   ft_printf("%-10.x", 0);
 
-- (alignement gauche) désactive 0.
+  680.KO (Wrong output) (Wrong return)
+        Expected: [0000000001], return: 10
+        Got:      [0000000001         ], return: 19
+     You can rerun this test with sh test 680
+     The function was called like this:
+   ft_printf("%-10.10x", 1);
 
-# n’a pas d’effet sur %u/%d/%i/%s/%c.
+  681.KO (Wrong output) (Wrong return)
+        Expected: [0000a     ], return: 10
+        Got:      [0000a         ], return: 14
+     You can rerun this test with sh test 681
+     The function was called like this:
+   ft_printf("%-10.5x", 10);
+682.OK
+  683.KO (Wrong output) (Wrong return)
+        Expected: [01388     ], return: 10
+        Got:      [01388      ], return: 11
+     You can rerun this test with sh test 683
+     The function was called like this:
+   ft_printf("%-10.5x", 5000);
+684.OK
+  685.KO (Wrong output) (Wrong return)
+        Expected: [0000000ffffffff], return: 15
+        Got:      [0000000ffffffff  ], return: 17
+     You can rerun this test with sh test 685
+     The function was called like this:
+   ft_printf("%-10.15x", -1);
+686.OK
+  687.KO (Wrong output) (Wrong return)
+        Expected: [               ], return: 15
+        Got:      [              ], return: 14
+     You can rerun this test with sh test 687
+     The function was called like this:
+   ft_printf("%-15.x", 0);
 
-%p ignore # (préfixe toujours).
+  688.KO (Wrong output) (Wrong return)
+        Expected: [0000000001     ], return: 15
+        Got:      [0000000001              ], return: 24
+     You can rerun this test with sh test 688
+     The function was called like this:
+   ft_printf("%-15.10x", 1);
 
-Cas (nil)
+  689.KO (Wrong output) (Wrong return)
+        Expected: [0000a          ], return: 15
+        Got:      [0000a              ], return: 19
+     You can rerun this test with sh test 689
+     The function was called like this:
+   ft_printf("%-15.5x", 10);
+690.OK
+  691.KO (Wrong output) (Wrong return)
+        Expected: [01388          ], return: 15
+        Got:      [01388           ], return: 16
+     You can rerun this test with sh test 691
+     The function was called like this:
+   ft_printf("%-15.5x", 5000);
+692.OK
+  693.KO (Wrong output) (Wrong return)
+        Expected: [0000000ffffffff], return: 15
+        Got:      [0000000ffffffff       ], return: 22
+     You can rerun this test with sh test 693
+     The function was called like this:
+   ft_printf("%-15.15x", -1);
+694.OK
+  695.KO (Wrong output) (Wrong return)
+        Expected: [000034   56         -x5007], return: 26
+        Got:      [00003   4   56         -x5007], return: 29
+     You can rerun this test with sh test 695
+     The function was called like this:
+   ft_printf("%-4.5x%x%4x%-10x-x5%-.3x", 3, 4, 5, 6, 7);
+696.OK 697.OK 698.OK 699.OK
+%X, widths, precisions and -:
+  700.OK 701.OK 702.OK 703.OK 704.OK 705.OK 706.OK 707.OK 708.OK 709.OK 710.OK 711.OK 712.OK 713.OK 714.OK 715.OK 716.OK 717.OK 718.OK 719.OK 720.OK 721.OK 722.OK 723.OK 724.OK 725.OK 726.OK 727.OK 728.OK 729.OK 730.OK 731.OK 732.OK 733.OK 734.OK 735.OK 736.OK 737.OK 738.OK 739.OK
+  740.KO (Wrong output) (Wrong return)
+        Expected: [          ], return: 10
+        Got:      [         ], return: 9
+     You can rerun this test with sh test 740
+     The function was called like this:
+   ft_printf("%-10.X", 0);
 
-%p avec NULL → imprime (nil) 
-(sans 0x), gère la width autour de cette string, et compte correctement les bytes.
+  741.KO (Wrong output) (Wrong return)
+        Expected: [0000000001], return: 10
+        Got:      [0000000001         ], return: 19
+     You can rerun this test with sh test 741
+     The function was called like this:
+   ft_printf("%-10.10X", 1);
 
-float
+  742.KO (Wrong output) (Wrong return)
+        Expected: [0000A     ], return: 10
+        Got:      [0000A         ], return: 14
+     You can rerun this test with sh test 742
+     The function was called like this:
+   ft_printf("%-10.5X", 10);
+743.OK
+  744.KO (Wrong output) (Wrong return)
+        Expected: [01388     ], return: 10
+        Got:      [01388      ], return: 11
+     You can rerun this test with sh test 744
+     The function was called like this:
+   ft_printf("%-10.5X", 5000);
+745.OK
+  746.KO (Wrong output) (Wrong return)
+        Expected: [0000000FFFFFFFF], return: 15
+        Got:      [0000000FFFFFFFF  ], return: 17
+     You can rerun this test with sh test 746
+     The function was called like this:
+   ft_printf("%-10.15X", -1);
+747.OK
+  748.KO (Wrong output) (Wrong return)
+        Expected: [               ], return: 15
+        Got:      [              ], return: 14
+     You can rerun this test with sh test 748
+     The function was called like this:
+   ft_printf("%-15.X", 0);
 
-42 n’exige pas %f dans le sujet standard. Si tu le gardes :
+  749.KO (Wrong output) (Wrong return)
+        Expected: [0000000001     ], return: 15
+        Got:      [0000000001              ], return: 24
+     You can rerun this test with sh test 749
+     The function was called like this:
+   ft_printf("%-15.10X", 1);
 
-Par défaut (pas de .), précision = 6.
+  750.KO (Wrong output) (Wrong return)
+        Expected: [0000A          ], return: 15
+        Got:      [0000A              ], return: 19
+     You can rerun this test with sh test 750
+     The function was called like this:
+   ft_printf("%-15.5X", 10);
+751.OK
+  752.KO (Wrong output) (Wrong return)
+        Expected: [01388          ], return: 15
+        Got:      [01388           ], return: 16
+     You can rerun this test with sh test 752
+     The function was called like this:
+   ft_printf("%-15.5X", 5000);
+753.OK
+  754.KO (Wrong output) (Wrong return)
+        Expected: [0000000FFFFFFFF], return: 15
+        Got:      [0000000FFFFFFFF       ], return: 22
+     You can rerun this test with sh test 754
+     The function was called like this:
+   ft_printf("%-15.15X", -1);
+755.OK
+  756.KO (Wrong output) (Wrong return)
+        Expected: [000034   56         -X5007], return: 26
+        Got:      [00003   4   56         -X5007], return: 29
+     You can rerun this test with sh test 756
+     The function was called like this:
+   ft_printf("%-4.5X%X%4X%-10X-X5%-.3X", 3, 4, 5, 6, 7);
+757.OK 758.OK 759.OK 760.OK
+%d, widths, precisions and 0:
+  761.OK 762.OK 763.OK 764.OK
+  765.KO (Wrong output)
+        Expected: [-0000000000000042000], return: 20
+        Got:      [00000000000000-42000], return: 20
+     You can rerun this test with sh test 765
+     The function was called like this:
+   ft_printf("%020d", -42000);
+766.OK 767.OK 768.OK 769.OK 770.OK 771.OK
+  772.KO (Wrong output)
+        Expected: [-00000000000000000002147483648], return: 30
+        Got:      [0000000000000000000-2147483648], return: 30
+     You can rerun this test with sh test 772
+     The function was called like this:
+   ft_printf("%030d", (int)-2147483648);
+773.OK 774.OK
+  775.KO (Wrong output)
+        Expected: [-02147483648], return: 12
+        Got:      [0-2147483648], return: 12
+     You can rerun this test with sh test 775
+     The function was called like this:
+   ft_printf("%012d", (int)-2147483648);
 
-Avec . seul → précision 0.
+  776.KO (Wrong output)
+        Expected: [-02147483648,                    3, 30,                                         -1], return: 82
+        Got:      [0-2147483648,                    3, 30,                                         -1], return: 82
+     You can rerun this test with sh test 776
+     The function was called like this:
+   ft_printf("%012d, %20d, %2d, %42d", (int)-2147483648, 3, 30, -1);
 
-Attention aux arrondis et aux flags +, espace, -, 0.
+  777.KO (Wrong output)
+        Expected: [-02147483648, 3, 30,                                         -1], return: 63
+        Got:      [0-2147483648, 3, 30,                                         -1], return: 63
+     You can rerun this test with sh test 777
+     The function was called like this:
+   ft_printf("%012d, %d, %2d, %42d", (int)-2147483648, 3, 30, -1);
 
-print_fmt :
+  778.KO (Wrong output)
+        Expected: [-00021474836480000000000000000000330-1], return: 38
+        Got:      [000-21474836480000000000000000000330-1], return: 38
+     You can rerun this test with sh test 778
+     The function was called like this:
+   ft_printf("%014d%020d%02d%0d", (int)-2147483648, 3, 30, -1);
 
-Le bloc if (conversion >= PTR && conversion <= HEX_MAJ) puis if (flags == HASH) écrit 0x avant de savoir
-la valeur et avant de gérer width/precision → ça casse l’alignement et le comptage.
-→ Calcule d’abord la représentation (avec/ sans préfixe), puis applique width/alignement une seule fois.
+  779.KO (Wrong output)
+        Expected: [-0002147483648c00000000000000000003s30x-1u], return: 42
+        Got:      [000-2147483648c00000000000000000003s30x-1u], return: 42
+     You can rerun this test with sh test 779
+     The function was called like this:
+   ft_printf("%014dc%020ds%02dx%0du", (int)-2147483648, 3, 30, -1);
 
-accuracyF :
+  780.KO (Wrong output)
+        Expected: [ ], return: 1
+        Got:      [0], return: 1
+     You can rerun this test with sh test 780
+     The function was called like this:
+   ft_printf("%01.d", 0);
 
-Tu mets prec = 6 quand prec == 0. C’est faux pour %.0d et %.0s. Laisse 0.
-La valeur “6 par défaut” ne s’applique qu’au cas sans . (et surtout au %f).
+  781.KO (Wrong output)
+        Expected: [ ], return: 1
+        Got:      [0], return: 1
+     You can rerun this test with sh test 781
+     The function was called like this:
+   ft_printf("%01.0d", 0);
 
-Pour les caractères “littéraux”, tu appelles ft_putchar_fd((*fmt), flags_struct); 
-: attention si ta version de ft_putchar_fd lit des flags/width 
-(elle ne devrait pas pour un char brut). Garde une version simple “write(1, &c, 1)”.
+  782.KO (Wrong output)
+        Expected: [  ], return: 2
+        Got:      [00], return: 2
+     You can rerun this test with sh test 782
+     The function was called like this:
+   ft_printf("%02.0d", 0);
+
+  783.KO (Wrong output)
+        Expected: [   ], return: 3
+        Got:      [000], return: 3
+     You can rerun this test with sh test 783
+     The function was called like this:
+   ft_printf("%03.0d", 0);
+784.OK 785.OK 786.OK
+  787.KO (Wrong output) (Wrong return)
+        Expected: [-4], return: 2
+        Got:      [-], return: 1
+     You can rerun this test with sh test 787
+     The function was called like this:
+   ft_printf("%01.0d", -4);
+788.OK 789.OK 790.OK
+  791.KO (Wrong output)
+        Expected: [4], return: 1
+        Got:      [0], return: 1
+     You can rerun this test with sh test 791
+     The function was called like this:
+   ft_printf("%01.0d", 4);
+792.OK 793.OK 794.OK 795.OK
+  796.KO (Wrong output) (Wrong return)
+        Expected: [                                     42000], return: 42
+        Got:      [000000000000000000000000000000000000000042000], return: 45
+     You can rerun this test with sh test 796
+     The function was called like this:
+   ft_printf("%042.2d", 42000);
+
+  797.KO (Wrong output)
+        Expected: [                      00000000000000042000], return: 42
+        Got:      [000000000000000000000000000000000000042000], return: 42
+     You can rerun this test with sh test 797
+     The function was called like this:
+   ft_printf("%042.20d", 42000);
+798.OK 799.OK
+  800.KO (Wrong output)
+        Expected: [         -0000042000], return: 20
+        Got:      [000000000-0000042000], return: 20
+     You can rerun this test with sh test 800
+     The function was called like this:
+   ft_printf("%020.10d", -42000);
+801.OK 802.OK 803.OK
+  804.KO (Wrong output)
+        Expected: [ 0000000000000008000 is how many tests are going to be made], return: 59
+        Got:      [00000000000000008000 is how many tests are going to be made], return: 59
+     You can rerun this test with sh test 804
+     The function was called like this:
+   ft_printf("%020.19d is how many tests are going to be made", 8000);
+805.OK 806.OK 807.OK 808.OK 809.OK 810.OK 811.OK 812.OK
+  813.KO (Wrong output)
+        Expected: [-00000000000000000002147483648], return: 30
+        Got:      [0000000000000000000-2147483648], return: 30
+     You can rerun this test with sh test 813
+     The function was called like this:
+   ft_printf("%030d", (int)-2147483648);
+814.OK 815.OK
+  816.KO (Wrong output)
+        Expected: [-02147483648], return: 12
+        Got:      [0-2147483648], return: 12
+     You can rerun this test with sh test 816
+     The function was called like this:
+   ft_printf("%012d", (int)-2147483648);
+
+  817.KO (Wrong output)
+        Expected: [-02147483648,                    3, 30, -00000000000000000000000000000000000000001], return: 82
+        Got:      [0-2147483648,                    3, 30, 0000000000000000000000000000000000000000-1], return: 82
+     You can rerun this test with sh test 817
+     The function was called like this:
+   ft_printf("%012d, %20d, %2d, %000042d", (int)-2147483648, 3, 30, -1);
+
+  818.KO (Wrong output)
+        Expected: [-02147483648, 3, 30,                                         -1], return: 63
+        Got:      [0-2147483648, 3, 30,                                         -1], return: 63
+     You can rerun this test with sh test 818
+     The function was called like this:
+   ft_printf("%012d, %d, %002d, %42d", (int)-2147483648, 3, 30, -1);
+
+  819.KO (Wrong output) (Wrong return)
+        Expected: [   -21474836480000000000000000000330-00001], return: 42
+        Got:      [00000000000-21474836480000000000000000000300-00001], return: 50
+     You can rerun this test with sh test 819
+     The function was called like this:
+   ft_printf("%0014.2d%020d%0002.d%000.5d", (int)-2147483648, 3, 30, -1);
+
+  820.KO (Wrong output)
+        Expected: [-0002147483648c00000000000000000003s30x-1u], return: 42
+        Got:      [000-2147483648c00000000000000000003s30x-1u], return: 42
+     You can rerun this test with sh test 820
+     The function was called like this:
+   ft_printf("%014dc%020ds%02dx%0du", (int)-2147483648, 3, 30, -1);
+
+%i, widths, precisions and 0:
+  821.OK 822.OK 823.OK 824.OK
+  825.KO (Wrong output)
+        Expected: [-0000000000000042000], return: 20
+        Got:      [00000000000000-42000], return: 20
+     You can rerun this test with sh test 825
+     The function was called like this:
+   ft_printf("%020i", -42000);
+826.OK 827.OK 828.OK 829.OK 830.OK 831.OK
+  832.KO (Wrong output)
+        Expected: [-00000000000000000002147483648], return: 30
+        Got:      [0000000000000000000-2147483648], return: 30
+     You can rerun this test with sh test 832
+     The function was called like this:
+   ft_printf("%030i", (int)-2147483648);
+833.OK 834.OK
+  835.KO (Wrong output)
+        Expected: [-02147483648], return: 12
+        Got:      [0-2147483648], return: 12
+     You can rerun this test with sh test 835
+     The function was called like this:
+   ft_printf("%012i", (int)-2147483648);
+
+  836.KO (Wrong output)
+        Expected: [-02147483648,                    3, 30,                                         -1], return: 82
+        Got:      [0-2147483648,                    3, 30,                                         -1], return: 82
+     You can rerun this test with sh test 836
+     The function was called like this:
+   ft_printf("%012i, %20i, %2i, %42i", (int)-2147483648, 3, 30, -1);
+
+  837.KO (Wrong output)
+        Expected: [-02147483648, 3, 30,                                         -1], return: 63
+        Got:      [0-2147483648, 3, 30,                                         -1], return: 63
+     You can rerun this test with sh test 837
+     The function was called like this:
+   ft_printf("%012i, %i, %2i, %42i", (int)-2147483648, 3, 30, -1);
+
+  838.KO (Wrong output)
+        Expected: [-00021474836480000000000000000000330-1], return: 38
+        Got:      [000-21474836480000000000000000000330-1], return: 38
+     You can rerun this test with sh test 838
+     The function was called like this:
+   ft_printf("%014i%020i%02i%0i", (int)-2147483648, 3, 30, -1);
+
+  839.KO (Wrong output)
+        Expected: [-0002147483648c00000000000000000003s30x-1u], return: 42
+        Got:      [000-2147483648c00000000000000000003s30x-1u], return: 42
+     You can rerun this test with sh test 839
+     The function was called like this:
+   ft_printf("%014ic%020is%02ix%0iu", (int)-2147483648, 3, 30, -1);
+
+  840.KO (Wrong output)
+        Expected: [ ], return: 1
+        Got:      [0], return: 1
+     You can rerun this test with sh test 840
+     The function was called like this:
+   ft_printf("%01.i", 0);
+
+  841.KO (Wrong output)
+        Expected: [ ], return: 1
+        Got:      [0], return: 1
+     You can rerun this test with sh test 841
+     The function was called like this:
+   ft_printf("%01.0i", 0);
+
+  842.KO (Wrong output)
+        Expected: [  ], return: 2
+        Got:      [00], return: 2
+     You can rerun this test with sh test 842
+     The function was called like this:
+   ft_printf("%02.0i", 0);
+
+  843.KO (Wrong output)
+        Expected: [   ], return: 3
+        Got:      [000], return: 3
+     You can rerun this test with sh test 843
+     The function was called like this:
+   ft_printf("%03.0i", 0);
+844.OK 845.OK 846.OK
+  847.KO (Wrong output) (Wrong return)
+        Expected: [-4], return: 2
+        Got:      [-], return: 1
+     You can rerun this test with sh test 847
+     The function was called like this:
+   ft_printf("%01.0i", -4);
+848.OK 849.OK 850.OK
+  851.KO (Wrong output)
+        Expected: [4], return: 1
+        Got:      [0], return: 1
+     You can rerun this test with sh test 851
+     The function was called like this:
+   ft_printf("%01.0i", 4);
+852.OK 853.OK 854.OK 855.OK
+  856.KO (Wrong output) (Wrong return)
+        Expected: [                                     42000], return: 42
+        Got:      [000000000000000000000000000000000000000042000], return: 45
+     You can rerun this test with sh test 856
+     The function was called like this:
+   ft_printf("%042.2i", 42000);
+
+  857.KO (Wrong output)
+        Expected: [                      00000000000000042000], return: 42
+        Got:      [000000000000000000000000000000000000042000], return: 42
+     You can rerun this test with sh test 857
+     The function was called like this:
+   ft_printf("%042.20i", 42000);
+858.OK 859.OK
+  860.KO (Wrong output)
+        Expected: [         -0000042000], return: 20
+        Got:      [000000000-0000042000], return: 20
+     You can rerun this test with sh test 860
+     The function was called like this:
+   ft_printf("%020.10i", -42000);
+861.OK 862.OK 863.OK
+  864.KO (Wrong output)
+        Expected: [ 0000000000000008000 is how many tests are going to be made], return: 59
+        Got:      [00000000000000008000 is how many tests are going to be made], return: 59
+     You can rerun this test with sh test 864
+     The function was called like this:
+   ft_printf("%020.19i is how many tests are going to be made", 8000);
+865.OK 866.OK 867.OK 868.OK 869.OK 870.OK 871.OK 872.OK
+  873.KO (Wrong output)
+        Expected: [-00000000000000000002147483648], return: 30
+        Got:      [0000000000000000000-2147483648], return: 30
+     You can rerun this test with sh test 873
+     The function was called like this:
+   ft_printf("%030i", (int)-2147483648);
+874.OK 875.OK
+  876.KO (Wrong output)
+        Expected: [-02147483648], return: 12
+        Got:      [0-2147483648], return: 12
+     You can rerun this test with sh test 876
+     The function was called like this:
+   ft_printf("%012i", (int)-2147483648);
+
+  877.KO (Wrong output)
+        Expected: [-02147483648,                    3, 30, -00000000000000000000000000000000000000001], return: 82
+        Got:      [0-2147483648,                    3, 30, 0000000000000000000000000000000000000000-1], return: 82
+     You can rerun this test with sh test 877
+     The function was called like this:
+   ft_printf("%012i, %20i, %2i, %000042i", (int)-2147483648, 3, 30, -1);
+
+  878.KO (Wrong output)
+        Expected: [-02147483648, 3, 30,                                         -1], return: 63
+        Got:      [0-2147483648, 3, 30,                                         -1], return: 63
+     You can rerun this test with sh test 878
+     The function was called like this:
+   ft_printf("%012i, %i, %002i, %42i", (int)-2147483648, 3, 30, -1);
+
+  879.KO (Wrong output) (Wrong return)
+        Expected: [   -21474836480000000000000000000330-00001], return: 42
+        Got:      [00000000000-21474836480000000000000000000300-00001], return: 50
+     You can rerun this test with sh test 879
+     The function was called like this:
+   ft_printf("%0014.2i%020i%0002.i%000.5i", (int)-2147483648, 3, 30, -1);
+
+  880.KO (Wrong output)
+        Expected: [-0002147483648c00000000000000000003s30x-1u], return: 42
+        Got:      [000-2147483648c00000000000000000003s30x-1u], return: 42
+     You can rerun this test with sh test 880
+     The function was called like this:
+   ft_printf("%014ic%020is%02ix%0iu", (int)-2147483648, 3, 30, -1);
+
+%u, widths, precisions and 0:
+  881.OK 882.OK 883.OK 884.OK 885.OK 886.OK 887.OK 888.OK 889.OK 890.OK 891.OK 892.OK 893.OK 894.OK 895.OK 896.OK 897.OK 898.OK 899.OK
+  900.KO (Wrong output) (Wrong return)
+        Expected: [ ], return: 1
+        Got:      [], return: 0
+     You can rerun this test with sh test 900
+     The function was called like this:
+   ft_printf("%01.u", 0);
+
+  901.KO (Wrong output) (Wrong return)
+        Expected: [ ], return: 1
+        Got:      [], return: 0
+     You can rerun this test with sh test 901
+     The function was called like this:
+   ft_printf("%01.0u", 0);
+
+  902.KO (Wrong output) (Wrong return)
+        Expected: [  ], return: 2
+        Got:      [0], return: 1
+     You can rerun this test with sh test 902
+     The function was called like this:
+   ft_printf("%02.0u", 0);
+
+  903.KO (Wrong output) (Wrong return)
+        Expected: [   ], return: 3
+        Got:      [00], return: 2
+     You can rerun this test with sh test 903
+     The function was called like this:
+   ft_printf("%03.0u", 0);
+904.OK 905.OK 906.OK 907.OK 908.OK 909.OK 910.OK
+  911.KO (Wrong output) (Wrong return)
+        Expected: [00000000000000000042], return: 20
+        Got:      [0000000000000000000000000042], return: 28
+     You can rerun this test with sh test 911
+     The function was called like this:
+   ft_printf("%010.20u", 42);
+
+  912.KO (Wrong output)
+        Expected: [                                     42000], return: 42
+        Got:      [000000000000000000000000000000000000042000], return: 42
+     You can rerun this test with sh test 912
+     The function was called like this:
+   ft_printf("%042.2u", 42000);
+
+  913.KO (Wrong output) (Wrong return)
+        Expected: [                      00000000000000042000], return: 42
+        Got:      [000000000000000000000000000000000000000000000000000042000], return: 57
+     You can rerun this test with sh test 913
+     The function was called like this:
+   ft_printf("%042.20u", 42000);
+
+  914.KO (Wrong output) (Wrong return)
+        Expected: [000000000000000000000000000000000000042000], return: 42
+        Got:      [0000000000000000000000000000000000000000000000000000000000000000000000000042000], return: 79
+     You can rerun this test with sh test 914
+     The function was called like this:
+   ft_printf("%042.42u", 42000);
+
+  915.KO (Wrong output) (Wrong return)
+        Expected: [0000000000000000000000000000000000000000000000042000], return: 52
+        Got:      [00000000000000000000000000000000000000000000000000000000000000000000000000000000000042000], return: 89
+     You can rerun this test with sh test 915
+     The function was called like this:
+   ft_printf("%042.52u", 42000);
+
+  916.KO (Wrong output) (Wrong return)
+        Expected: [wait for it... 00000000000000000000000000000000000000000000000042], return: 65
+        Got:      [wait for it... 0000000000000000000000000000000000000000000000000000000000000000000000000000000000000], return: 113
+     You can rerun this test with sh test 916
+     The function was called like this:
+   ft_printf("wait for it... %050.50u", 42);
+
+  917.KO (Wrong output) (Wrong return)
+        Expected: [ 0000000000000008000 is how many tests are going to be made], return: 59
+        Got:      [00000000000000000000000000000008000 is how many tests are going to be made], return: 74
+     You can rerun this test with sh test 917
+     The function was called like this:
+   ft_printf("%020.19u is how many tests are going to be made", 8000);
+
+  918.KO (Wrong output) (Wrong return)
+        Expected: [00000000000000008000 is how many tests are going to be made], return: 59
+        Got:      [000000000000000000000000000000008000 is how many tests are going to be made], return: 75
+     You can rerun this test with sh test 918
+     The function was called like this:
+   ft_printf("%020.20u is how many tests are going to be made", 8000);
+
+  919.KO (Wrong output) (Wrong return)
+        Expected: [000000000000000008000 is how many tests are going to be made], return: 60
+        Got:      [0000000000000000000000000000000008000 is how many tests are going to be made], return: 76
+     You can rerun this test with sh test 919
+     The function was called like this:
+   ft_printf("%020.21u is how many tests are going to be made", 8000);
+920.OK 921.OK 922.OK 923.OK 924.OK 925.OK 926.OK 927.OK 928.OK 929.OK 930.OK 931.OK
+  932.KO (Wrong output)
+        Expected: [    429496729500000000000000000003304294967295], return: 46
+        Got:      [0000429496729500000000000000000003304294967295], return: 46
+     You can rerun this test with sh test 932
+     The function was called like this:
+   ft_printf("%0014.2u%020u%0002.u%000.5u", -1, 3, 30, -1);
+933.OK
+%x, widths, precisions and 0:
+  934.OK 935.OK 936.OK 937.OK 938.OK 939.OK 940.OK 941.OK 942.OK 943.OK 944.OK 945.OK 946.OK 947.OK 948.OK 949.OK 950.OK 951.OK 952.OK
+  953.KO (Wrong output) (Wrong return)
+        Expected: [ ], return: 1
+        Got:      [], return: 0
+     You can rerun this test with sh test 953
+     The function was called like this:
+   ft_printf("%01.x", 0);
+
+  954.KO (Wrong output) (Wrong return)
+        Expected: [ ], return: 1
+        Got:      [], return: 0
+     You can rerun this test with sh test 954
+     The function was called like this:
+   ft_printf("%01.0x", 0);
+
+  955.KO (Wrong output) (Wrong return)
+        Expected: [  ], return: 2
+        Got:      [0], return: 1
+     You can rerun this test with sh test 955
+     The function was called like this:
+   ft_printf("%02.0x", 0);
+
+  956.KO (Wrong output) (Wrong return)
+        Expected: [   ], return: 3
+        Got:      [00], return: 2
+     You can rerun this test with sh test 956
+     The function was called like this:
+   ft_printf("%03.0x", 0);
+957.OK 958.OK 959.OK 960.OK 961.OK 962.OK 963.OK
+  964.KO (Wrong output) (Wrong return)
+        Expected: [0000000000000000002a], return: 20
+        Got:      [000000000000000000000000002a], return: 28
+     You can rerun this test with sh test 964
+     The function was called like this:
+   ft_printf("%010.20x", 42);
+
+  965.KO (Wrong output)
+        Expected: [                                      a410], return: 42
+        Got:      [00000000000000000000000000000000000000a410], return: 42
+     You can rerun this test with sh test 965
+     The function was called like this:
+   ft_printf("%042.2x", 42000);
+
+  966.KO (Wrong output) (Wrong return)
+        Expected: [                      0000000000000000a410], return: 42
+        Got:      [000000000000000000000000000000000000000000000000000000a410], return: 58
+     You can rerun this test with sh test 966
+     The function was called like this:
+   ft_printf("%042.20x", 42000);
+
+  967.KO (Wrong output) (Wrong return)
+        Expected: [00000000000000000000000000000000000000a410], return: 42
+        Got:      [0000000000000000000000000000000000000000000000000000000000000000000000000000a410], return: 80
+     You can rerun this test with sh test 967
+     The function was called like this:
+   ft_printf("%042.42x", 42000);
+
+  968.KO (Wrong output) (Wrong return)
+        Expected: [000000000000000000000000000000000000000000000000a410], return: 52
+        Got:      [00000000000000000000000000000000000000000000000000000000000000000000000000000000000000a410], return: 90
+     You can rerun this test with sh test 968
+     The function was called like this:
+   ft_printf("%042.52x", 42000);
+
+  969.KO (Wrong output) (Wrong return)
+        Expected: [wait for it... 0000000000000000000000000000000000000000000000002a], return: 65
+        Got:      [wait for it... 0000000000000000000000000000000000000000000000000000000000000000000000000000000000000], return: 113
+     You can rerun this test with sh test 969
+     The function was called like this:
+   ft_printf("wait for it... %050.50x", 42);
+
+  970.KO (Wrong output) (Wrong return)
+        Expected: [ 0000000000000001f40 is how many tests are going to be made], return: 59
+        Got:      [00000000000000000000000000000001f40 is how many tests are going to be made], return: 74
+     You can rerun this test with sh test 970
+     The function was called like this:
+   ft_printf("%020.19x is how many tests are going to be made", 8000);
+
+  971.KO (Wrong output) (Wrong return)
+        Expected: [00000000000000001f40 is how many tests are going to be made], return: 59
+        Got:      [000000000000000000000000000000001f40 is how many tests are going to be made], return: 75
+     You can rerun this test with sh test 971
+     The function was called like this:
+   ft_printf("%020.20x is how many tests are going to be made", 8000);
+
+  972.KO (Wrong output) (Wrong return)
+        Expected: [000000000000000001f40 is how many tests are going to be made], return: 60
+        Got:      [0000000000000000000000000000000001f40 is how many tests are going to be made], return: 76
+     You can rerun this test with sh test 972
+     The function was called like this:
+   ft_printf("%020.21x is how many tests are going to be made", 8000);
+973.OK 974.OK 975.OK 976.OK 977.OK 978.OK 979.OK 980.OK 981.OK 982.OK 983.OK 984.OK
+  985.KO (Wrong output)
+        Expected: [      ffffffff000000000000000000031effffffff], return: 44
+        Got:      [000000ffffffff000000000000000000031effffffff], return: 44
+     You can rerun this test with sh test 985
+     The function was called like this:
+   ft_printf("%0014.2x%020x%0002.x%000.5x", -1, 3, 30, -1);
+986.OK
+%X, widths, precisions and 0:
+  987.OK 988.OK 989.OK 990.OK 991.OK 992.OK 993.OK 994.OK 995.OK 996.OK 997.OK 998.OK 999.OK 1000.OK 1001.OK 1002.OK 1003.OK 1004.OK 1005.OK
+  1006.KO (Wrong output) (Wrong return)
+        Expected: [ ], return: 1
+        Got:      [], return: 0
+     You can rerun this test with sh test 1006
+     The function was called like this:
+   ft_printf("%01.X", 0);
+
+  1007.KO (Wrong output) (Wrong return)
+        Expected: [ ], return: 1
+        Got:      [], return: 0
+     You can rerun this test with sh test 1007
+     The function was called like this:
+   ft_printf("%01.0X", 0);
+
+  1008.KO (Wrong output) (Wrong return)
+        Expected: [  ], return: 2
+        Got:      [0], return: 1
+     You can rerun this test with sh test 1008
+     The function was called like this:
+   ft_printf("%02.0X", 0);
+
+  1009.KO (Wrong output) (Wrong return)
+        Expected: [   ], return: 3
+        Got:      [00], return: 2
+     You can rerun this test with sh test 1009
+     The function was called like this:
+   ft_printf("%03.0X", 0);
+1010.OK 1011.OK 1012.OK 1013.OK 1014.OK 1015.OK
+  1016.KO (Wrong output) (Wrong return)
+        Expected: [0000000000000000002A], return: 20
+        Got:      [000000000000000000000000002A], return: 28
+     You can rerun this test with sh test 1016
+     The function was called like this:
+   ft_printf("%010.20X", 42);
+
+  1017.KO (Wrong output)
+        Expected: [                                      A410], return: 42
+        Got:      [00000000000000000000000000000000000000A410], return: 42
+     You can rerun this test with sh test 1017
+     The function was called like this:
+   ft_printf("%042.2X", 42000);
+
+  1018.KO (Wrong output) (Wrong return)
+        Expected: [                      0000000000000000A410], return: 42
+        Got:      [000000000000000000000000000000000000000000000000000000A410], return: 58
+     You can rerun this test with sh test 1018
+     The function was called like this:
+   ft_printf("%042.20X", 42000);
+
+  1019.KO (Wrong output) (Wrong return)
+        Expected: [00000000000000000000000000000000000000A410], return: 42
+        Got:      [0000000000000000000000000000000000000000000000000000000000000000000000000000A410], return: 80
+     You can rerun this test with sh test 1019
+     The function was called like this:
+   ft_printf("%042.42X", 42000);
+
+  1020.KO (Wrong output) (Wrong return)
+        Expected: [000000000000000000000000000000000000000000000000A410], return: 52
+        Got:      [00000000000000000000000000000000000000000000000000000000000000000000000000000000000000A410], return: 90
+     You can rerun this test with sh test 1020
+     The function was called like this:
+   ft_printf("%042.52X", 42000);
+
+  1021.KO (Wrong output) (Wrong return)
+        Expected: [wait for it... 0000000000000000000000000000000000000000000000002A], return: 65
+        Got:      [wait for it... 0000000000000000000000000000000000000000000000000000000000000000000000000000000000000], return: 113
+     You can rerun this test with sh test 1021
+     The function was called like this:
+   ft_printf("wait for it... %050.50X", 42);
+
+  1022.KO (Wrong output) (Wrong return)
+        Expected: [ 0000000000000001F40 is how many tests are going to be made], return: 59
+        Got:      [00000000000000000000000000000001F40 is how many tests are going to be made], return: 74
+     You can rerun this test with sh test 1022
+     The function was called like this:
+   ft_printf("%020.19X is how many tests are going to be made", 8000);
+
+  1023.KO (Wrong output) (Wrong return)
+        Expected: [00000000000000001F40 is how many tests are going to be made], return: 59
+        Got:      [000000000000000000000000000000001F40 is how many tests are going to be made], return: 75
+     You can rerun this test with sh test 1023
+     The function was called like this:
+   ft_printf("%020.20X is how many tests are going to be made", 8000);
+
+  1024.KO (Wrong output) (Wrong return)
+        Expected: [000000000000000001F40 is how many tests are going to be made], return: 60
+        Got:      [0000000000000000000000000000000001F40 is how many tests are going to be made], return: 76
+     You can rerun this test with sh test 1024
+     The function was called like this:
+   ft_printf("%020.21X is how many tests are going to be made", 8000);
+1025.OK 1026.OK 1027.OK 1028.OK 1029.OK 1030.OK
+  1031.KO (Wrong output) (Wrong return)
+        Expected: [          000000000000FFFFFFFF], return: 30
+        Got:      [0000000000000000000000000000000000FFFFFFFF], return: 42
+     You can rerun this test with sh test 1031
+     The function was called like this:
+   ft_printf("%030.20X", -1);
+
+  1032.KO (Wrong output) (Wrong return)
+        Expected: [000FFFFFFFF], return: 11
+        Got:      [00000FFFFFFFF], return: 13
+     You can rerun this test with sh test 1032
+     The function was called like this:
+   ft_printf("%010.11X", -1);
+
+  1033.KO (Wrong output) (Wrong return)
+        Expected: [000FFFFFFFF], return: 11
+        Got:      [000000FFFFFFFF], return: 14
+     You can rerun this test with sh test 1033
+     The function was called like this:
+   ft_printf("%011.11X", -1);
+
+  1034.KO (Wrong output) (Wrong return)
+        Expected: [ 000FFFFFFFF], return: 12
+        Got:      [0000000FFFFFFFF], return: 15
+     You can rerun this test with sh test 1034
+     The function was called like this:
+   ft_printf("%012.11X", -1);
+
+  1035.KO (Wrong output) (Wrong return)
+        Expected: [0000FFFFFFFF,                    3, 1E,                       000000000000FFFFFFFF], return: 82
+        Got:      [0000FFFFFFFF,                    3, 1E, 0000000000000000000000000000000000000000000000FFFFFFFF], return: 94
+     You can rerun this test with sh test 1035
+     The function was called like this:
+   ft_printf("%012X, %20X, %2X, %000042.20X", -1, 3, 30, -1);
+1036.OK
+  1037.KO (Wrong output)
+        Expected: [      FFFFFFFF000000000000000000031EFFFFFFFF], return: 44
+        Got:      [000000FFFFFFFF000000000000000000031EFFFFFFFF], return: 44
+     You can rerun this test with sh test 1037
+     The function was called like this:
+   ft_printf("%0014.2X%020X%0002.X%000.5X", -1, 3, 30, -1);
+1038.OK
+%x and #:
+  1039.OK 1040.OK 1041.OK 1042.OK 1043.OK 1044.OK 1045.OK 1046.OK 1047.OK 1048.OK 1049.OK 1050.OK 1051.OK 1052.OK 1053.OK 1054.OK 1055.OK 1056.OK 1057.OK 1058.OK 1059.OK 1060.OK
+%X and #:
+  1061.OK 1062.OK 1063.OK 1064.OK 1065.OK 1066.OK 1067.OK 1068.OK 1069.OK 1070.OK 1071.OK 1072.OK 1073.OK 1074.OK 1075.OK 1076.OK 1077.OK 1078.OK 1079.OK 1080.OK 1081.OK 1082.OK
+%d and ' ':
+  1083.OK 1084.OK 1085.OK 1086.OK 1087.OK 1088.OK 1089.OK 1090.OK 1091.OK 1092.OK 1093.OK 1094.OK 1095.OK 1096.OK 1097.OK
+%i and ' ':
+  1098.OK 1099.OK 1100.OK 1101.OK 1102.OK 1103.OK 1104.OK 1105.OK 1106.OK 1107.OK 1108.OK 1109.OK 1110.OK 1111.OK 1112.OK
+%d and +:
+  1113.OK 1114.OK 1115.OK 1116.OK 1117.OK 1118.OK 1119.OK 1120.OK 1121.OK 1122.OK 1123.OK 1124.OK 1125.OK 1126.OK 1127.OK
+%d and +:
+  1128.OK 1129.OK 1130.OK 1131.OK 1132.OK 1133.OK 1134.OK 1135.OK 1136.OK 1137.OK 1138.OK 1139.OK 1140.OK 1141.OK 1142.OK
