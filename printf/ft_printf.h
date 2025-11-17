@@ -16,8 +16,6 @@
 # include <unistd.h>
 # include <stdarg.h>
 # include <limits.h>
-///WARNING !!!
-# include <stdio.h>
 
 # define SIZE_MAX -1
 # define UPPER 1
@@ -40,6 +38,10 @@
 # define HEX_LOW 6
 # define HEX_MAJ 7
 # define POINT 1
+
+# define COUNT 0
+# define LEN 1
+# define PAD 2
 
 ////////////// struct format
 
@@ -95,6 +97,7 @@ size_t	Uputnbr(unsigned long n, t_flags f);
 int		ft_toupper(int c);
 size_t	ft_strlen(const char *s);
 void	ft_toupper_str(char *s);
+int		ft_max(int a, int b);
 
 ////////////// putnbr helper
 

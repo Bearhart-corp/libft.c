@@ -12,14 +12,6 @@
 
 #include "ft_printf.h"
 
-static int	ft_max(int a, int b)
-{
-	if (a > b)
-		return (a);
-	else
-		return (b);
-}
-
 size_t	Uputnbr(unsigned long n, t_flags f)
 {
 	nbr		s;

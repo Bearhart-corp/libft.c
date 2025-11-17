@@ -19,7 +19,7 @@ static int	power(char pow)
 
 	power = (int)pow;
 	acc = 1;
-	while (pow--)
+	while (power--)
 		acc = acc * 10;
 	return (acc);
 }
@@ -43,10 +43,3 @@ size_t	ft_putfloat(double n, t_flags f)
 	count += ft_putnbr(n, f);
 	return (count);
 }
-/*
-int main()
-{
-	ft_putfloat(42.123, 6);
-}*/
-// accuracy : if precision .2f alors 100 pour .6f  alors 1000000
-//ft_putnbr(long n, int unsign, unsigned short int base, int upper)

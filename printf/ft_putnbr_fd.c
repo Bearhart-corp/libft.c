@@ -12,14 +12,6 @@
 
 #include "ft_printf.h"
 
-static int	ft_max(int a, int b)
-{
-	if (a > b)
-		return (a);
-	else
-		return (b);
-}
-
 size_t	ft_putnbr(long n, t_flags f)
 {
 	nbr		s;
@@ -52,6 +44,7 @@ size_t	ft_putnbr(long n, t_flags f)
 			s.count += write(1, " ", 1);
 	return (s.count);
 }
+
 /*
 printf("c:%zu\n n_d:%zu\n pre:%zu\n s_len:%zu\n", s.count, s.n_digit, s.prefix_len, s.sign_len);
 printf("sign:%c\n, prefix: %s\n, pad: %d\n, base; %d\n, upper: %d\n, hex: %d\n",s.sign, s.prefix,s.pad, s.base, s.upper, s.is_hex);

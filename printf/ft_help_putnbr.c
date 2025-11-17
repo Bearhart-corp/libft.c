@@ -11,9 +11,17 @@
 /* ************************************************************************** */
 
 #include "ft_printf.h"
-#include <stdio.h>
 ////////////// u, p, x, X
-size_t	h(unsigned long n, int base, char *buf, t_flags f)
+
+int	ft_max(int a, int b)
+{
+	if (a > b)
+		return (a);
+	else
+		return (b);
+}
+
+static size_t	hh(unsigned long n, int base, char *buf, t_flags f)
 {
 	size_t	count;
 	size_t		i;
@@ -21,13 +29,6 @@ size_t	h(unsigned long n, int base, char *buf, t_flags f)
 
 	i = -1;
 	count = 0;
-	if (n == 0)
-	{
-		buf[count++] = '0';
-		if (f.point && f.prec == 0)
-			buf[--count] = 0;
-		return (count);
-	}
 	while (n > 0)
 	{
 		tmp[count++] = "0123456789abcdef"[n % base];
@@ -41,6 +42,21 @@ size_t	h(unsigned long n, int base, char *buf, t_flags f)
 	while (++i < count)
 		buf[i] = tmp[(count - 1) - i];
 	return (count);
+}
+
+size_t	h(unsigned long n, int base, char *buf, t_flags f)
+{
+	size_t	count;
+
+	count = 0;
+	if (n == 0)
+	{
+		buf[count++] = '0';
+		if (f.point && f.prec == 0)
+			buf[--count] = 0;
+		return (count);
+	}
+	return (hh(n, base,  buf, f));
 }
 
 size_t	ptr_zero(t_flags f)
@@ -78,7 +94,7 @@ size_t	ft_putnbr_help(long n, char *buf, t_flags f)
 	size_t		i;
 	char	tmp[64];
 
-	i = 0;
+	i = -1;
 	count = 0;
 	if (n == 0)
 	{
@@ -92,10 +108,7 @@ size_t	ft_putnbr_help(long n, char *buf, t_flags f)
 		tmp[count++] = "0123456789"[n % 10];
 		n = n /10;
 	}
-	while (i < count)
-	{
+	while (++i < count)
 		buf[i] = tmp[(count - 1) - i];
-		i++;
-	}
 	return (count);
 }
