@@ -15,7 +15,7 @@
 static int	power(char pow)
 {
 	int	acc;
-	int power;
+	int	power;
 
 	power = (int)pow;
 	acc = 1;
@@ -39,7 +39,5 @@ size_t	ft_putfloat(double n, t_flags f)
 	n_int = (long)n;
 	count += ft_putnbr(n_int, f);
 	count += write(1, ".", 1);
-	n = (n - n_int) * power(f.prec);
-	count += ft_putnbr(n, f);
-	return (count);
+	return (count += ft_putnbr(n, f), n = (n - n_int) * power(f.prec));
 }

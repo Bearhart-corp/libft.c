@@ -13,20 +13,20 @@
 #include "ft_printf.h"
 #include <stdio.h>
 
-static size_t print_fmt(va_list lst, t_flags *f_struct)
+static size_t	print_fmt(va_list lst, t_flags *f_struct)
 {
 	size_t	count;
 
 	count = 0;
-	if ((*f_struct).conversion == STRING)
+	if ((*f_struct).conv == STRING)
 		count += ft_putstr_fd(va_arg(lst, char *), *f_struct);
-	else if ((*f_struct).conversion == LETTER)
+	else if ((*f_struct).conv == LETTER)
 		count += ft_putchar_fd((char)va_arg(lst, int), *f_struct);
-	else if ((*f_struct).conversion == INTEGER)
+	else if ((*f_struct).conv == INTEGER)
 		count += ft_putnbr((long)va_arg(lst, int), *f_struct);
-	else if ((*f_struct).conversion >= PTR
-		&& (*f_struct).conversion <= HEX_MAJ)
-			count += Uputnbr((unsigned long)va_arg(lst, void *), *f_struct);
+	else if ((*f_struct).conv >= PTR
+		&& (*f_struct).conv <= HEX_MAJ)
+		count += u_putnbr((unsigned long)va_arg(lst, void *), *f_struct);
 	else
 		count += ft_putfloat(va_arg(lst, double), *f_struct);
 	return (count);
@@ -38,35 +38,35 @@ static size_t	conv(const char **fmt, va_list lst, t_flags *f_struct)
 
 	count = 0;
 	if ((**fmt) == 's')
-		(*f_struct).conversion = STRING;
+		(*f_struct).conv = STRING;
 	else if ((**fmt) == 'c')
-		(*f_struct).conversion = LETTER;
+		(*f_struct).conv = LETTER;
 	else if ((**fmt) == 'd' || (**fmt) == 'i')
-		(*f_struct).conversion = INTEGER;
+		(*f_struct).conv = INTEGER;
 	else if ((**fmt) == 'p')
-		(*f_struct).conversion = PTR;
+		(*f_struct).conv = PTR;
 	else if ((**fmt) == 'u')
-		(*f_struct).conversion = UNSIGNED;
+		(*f_struct).conv = UNSIGNED;
 	else if ((**fmt) == 'x')
-		(*f_struct).conversion = HEX_LOW;
+		(*f_struct).conv = HEX_LOW;
 	else if ((**fmt) == 'X')
-		(*f_struct).conversion = HEX_MAJ;
+		(*f_struct).conv = HEX_MAJ;
 	else if ((**fmt) == 'f')
-		(*f_struct).conversion = 8;
+		(*f_struct).conv = 8;
 	else if ((**fmt) == '%')
-		return count += ft_putchar_fd('%', *f_struct);
+		return (count += ft_putchar_fd('%', *f_struct));
 	count += print_fmt(lst, f_struct);
 	return (count);
 }
 
-static size_t	accuracyF(const char **fmt, va_list lst, t_flags *f_struct)
+static size_t	accuracy_f(const char **fmt, va_list lst, t_flags *f_struct)
 {
 	size_t	count;
 
 	count = 0;
 	if ((**fmt) == '.')
 	{
-		(*f_struct).point = 1; 
+		(*f_struct).point = 1;
 		(*fmt)++;
 	}
 	else
@@ -89,7 +89,7 @@ static size_t	flag_pars(const char **fmt, va_list lst, t_flags *f_struct)
 
 	count = 0;
 	init(f_struct);
-	while (**fmt == '-' || **fmt == '+' || **fmt == ' ' || **fmt == '#' 
+	while (**fmt == '-' || **fmt == '+' || **fmt == ' ' || **fmt == '#'
 		|| **fmt == '0')
 	{
 		if ((**fmt) == '-')
@@ -105,11 +105,11 @@ static size_t	flag_pars(const char **fmt, va_list lst, t_flags *f_struct)
 		(*fmt)++;
 	}
 	while (**fmt >= 48 && **fmt <= 57)
-			{
-				(*f_struct).width = (*f_struct).width * 10 + (**fmt - 48);
-				(*fmt)++;
-			}
-	return count += accuracyF(fmt, lst, f_struct);
+	{
+		(*f_struct).width = (*f_struct).width * 10 + (**fmt - 48);
+		(*fmt)++;
+	}
+	return (count += accuracy_f(fmt, lst, f_struct));
 }
 
 int	ft_printf(const char *fmt, ...)

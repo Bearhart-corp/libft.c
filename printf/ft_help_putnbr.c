@@ -24,7 +24,7 @@ int	ft_max(int a, int b)
 static size_t	hh(unsigned long n, int base, char *buf, t_flags f)
 {
 	size_t	count;
-	size_t		i;
+	size_t	i;
 	char	tmp[64];
 
 	i = -1;
@@ -34,7 +34,7 @@ static size_t	hh(unsigned long n, int base, char *buf, t_flags f)
 		tmp[count++] = "0123456789abcdef"[n % base];
 		n = n / base;
 	}
-	if (f.conversion == PTR || f.flags & HASH)
+	if (f.conv == PTR || f.flags & HASH)
 	{
 		tmp[count++] = 'x';
 		tmp[count++] = '0';
@@ -56,29 +56,29 @@ size_t	h(unsigned long n, int base, char *buf, t_flags f)
 			buf[--count] = 0;
 		return (count);
 	}
-	return (hh(n, base,  buf, f));
+	return (hh(n, base, buf, f));
 }
 
 size_t	ptr_zero(t_flags f)
 {
-	int 	pad;
-	size_t	L;
+	int		pad;
+	size_t	l;
 	char	*nil;
 	size_t	count;
 
 	count = 0;
 	{
 		nil = "(nil)";
-		L = 5;
+		l = 5;
 		count = 0;
-		if (f.width > L)
-			pad = f.width - L;
+		if (f.width > l)
+			pad = f.width - l;
 		else
 			pad = 0;
 		if (!(f.flags & START_LEFT))
 			while (pad--)
 				count += write(1, " ", 1);
-		count += write(1, nil, L);
+		count += write(1, nil, l);
 		if (f.flags & START_LEFT)
 			while (pad--)
 				count += write(1, " ", 1);
@@ -91,7 +91,7 @@ size_t	ptr_zero(t_flags f)
 size_t	ft_putnbr_help(long n, char *buf, t_flags f)
 {
 	size_t	count;
-	size_t		i;
+	size_t	i;
 	char	tmp[64];
 
 	i = -1;
@@ -106,7 +106,7 @@ size_t	ft_putnbr_help(long n, char *buf, t_flags f)
 	while (n > 0)
 	{
 		tmp[count++] = "0123456789"[n % 10];
-		n = n /10;
+		n = n / 10;
 	}
 	while (++i < count)
 		buf[i] = tmp[(count - 1) - i];

@@ -50,7 +50,7 @@ typedef struct s_flags
 	unsigned char	flags;
 	size_t			width;
 	int				prec;
-	unsigned char	conversion;
+	unsigned char	conv;
 	unsigned char	point;
 }	t_flags;
 
@@ -58,6 +58,7 @@ typedef struct s_flags
 
 typedef struct nombre
 {
+	int		pad_prec;
 	size_t	count;
 	char	sign;
 	size_t	sign_len;
@@ -72,9 +73,9 @@ typedef struct nombre
 	char	*prefix;
 	size_t	prefix_len;
 	int		z;
-	int		zero;
 	char	sym_pad;
-}	nbr;
+	int		zero;
+}	t_nbr;
 
 ////////////// main
 
@@ -83,14 +84,14 @@ int		ft_printf(const char *fmt, ...);
 ////////////// printers.char
 
 size_t	ft_putchar_fd(char c, t_flags flags_struct);
-size_t  ft_putstr_fd(char *s, t_flags f);
+size_t	ft_putstr_fd(char *s, t_flags f);
 size_t	ft_putchar(char c);
 
 ////////////// printers.nbr
 
 size_t	ft_putfloat(double n, t_flags flag_struct);
 size_t	ft_putnbr(long n, t_flags flags_struct);
-size_t	Uputnbr(unsigned long n, t_flags f);
+size_t	u_putnbr(unsigned long n, t_flags f);
 
 ////////////// petits helper
 
@@ -107,8 +108,8 @@ size_t	ptr_zero(t_flags f);
 
 ////////////// init struct
 
-void	init_nbr_int(nbr *s, t_flags f, int neg, long n);
+void	init_nbr_int(t_nbr *s, t_flags f, long *n);
 void	init(t_flags *f);
-void	init_nbr(nbr *s, t_flags f, unsigned long n);
+void	init_nbr(t_nbr *s, t_flags f, unsigned long n);
 
 #endif

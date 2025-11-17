@@ -14,8 +14,8 @@
 
 size_t	ft_putchar_fd(char c, t_flags f)
 {
-	int 	i;
-	int		largeur;
+	int	i;
+	int	largeur;
 
 	largeur = f.width;
 	i = 0;
@@ -33,7 +33,7 @@ size_t	ft_putchar_fd(char c, t_flags f)
 	return (i);
 }
 
-size_t ft_putchar(char c)
+size_t	ft_putchar(char c)
 {
 	return (write(1, &c, 1));
 }
