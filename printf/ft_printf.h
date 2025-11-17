@@ -99,7 +99,7 @@ void	ft_toupper_str(char *s);
 ////////////// putnbr helper
 
 size_t	h(unsigned long n, int base, char *buf, t_flags f);
-size_t	ft_putnbr_help(long n, char *buf);
+size_t	ft_putnbr_help(long n, char *buf, t_flags f);
 size_t	ptr_zero(t_flags f);
 
 ////////////// init struct

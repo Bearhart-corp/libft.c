@@ -24,6 +24,8 @@ size_t	h(unsigned long n, int base, char *buf, t_flags f)
 	if (n == 0)
 	{
 		buf[count++] = '0';
+		if (f.point && f.prec == 0)
+			buf[--count] = 0;
 		return (count);
 	}
 	while (n > 0)
@@ -70,7 +72,7 @@ size_t	ptr_zero(t_flags f)
 
 //////////////// i, d
 
-size_t	ft_putnbr_help(long n, char *buf)
+size_t	ft_putnbr_help(long n, char *buf, t_flags f)
 {
 	size_t	count;
 	size_t		i;
@@ -81,6 +83,8 @@ size_t	ft_putnbr_help(long n, char *buf)
 	if (n == 0)
 	{
 		buf[count++] = '0';
+		if (f.point && f.prec == 0)
+			buf[--count] = 0;
 		return (count);
 	}
 	while (n > 0)

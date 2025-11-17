@@ -119,7 +119,7 @@ int	ft_printf(const char *fmt, ...)
 	t_flags	f_struct;
 
 	count = 0;
-	if (!fmt)
+	if (!fmt || write(1, "", 0) == -1)
 		return (-1);
 	va_start(lst, fmt);
 	while (*fmt)

@@ -12,6 +12,13 @@
 
 #include "ft_printf.h"
 
+static int	ft_max(int a, int b)
+{
+	if (a > b)
+		return (a);
+	else
+		return (b);
+}
 
 size_t	Uputnbr(unsigned long n, t_flags f)
 {
@@ -23,7 +30,7 @@ size_t	Uputnbr(unsigned long n, t_flags f)
 		return (s.count+= ptr_zero(f));
 	if (s.upper && f.conversion != PTR)
 		ft_toupper_str(s.buf);
-	s.z = f.width - (int)(s.sign_len + s.n_digit);
+	s.z = f.width - (int)(s.sign_len + ft_max(s.n_digit, f.prec));
 	if (s.z < 0)
 		s.z = 0;
 	if (f.point)

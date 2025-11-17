@@ -60,7 +60,7 @@ void	init_nbr(nbr *s, t_flags f, unsigned long n)
 		(*s).base = 16;
 	(*s).is_left = (f.flags & START_LEFT);
 	(*s).zero_pad_width = (f.flags & ZEROS) && !((*s).is_left);
-	if ((*s).zero_pad_width)
+	if ((*s).zero_pad_width && !(f.point))
 		(*s).sym_pad = '0';
 	else
 		(*s).sym_pad = ' ';
@@ -83,9 +83,9 @@ void	init_nbr_int(nbr *s, t_flags f, int neg, long n)
 	(*s).upper = 0;
 	(*s).is_left = (f.flags & START_LEFT);
 	(*s).zero_pad_width = (f.flags & ZEROS) && !((*s).is_left);
-	(*s).n_digit = ft_putnbr_help(n, (*s).buf);
+	(*s).n_digit = ft_putnbr_help(n, (*s).buf, f);
 	(*s).prefix = 0;
-	if ((*s).zero_pad_width)
+	if ((*s).zero_pad_width && !(f.point))
 		(*s).sym_pad = '0';
 	else
 		(*s).sym_pad = ' ';
