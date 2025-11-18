@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "ft_printf.h"
-#include <stdio.h>
 
 static size_t	print_fmt(va_list lst, t_flags *f)
 {
@@ -23,7 +22,10 @@ static size_t	print_fmt(va_list lst, t_flags *f)
 		return (ft_putnbr((long)va_arg(lst, int), *f));
 	if (f->conv >= PTR && f->conv <= HEX_MAJ)
 		return (u_putnbr((unsigned long)va_arg(lst, void *), *f));
-	return (ft_putfloat(va_arg(lst, double), *f));
+	if (f->conv == 8)
+		return (ft_putfloat(va_arg(lst, double), *f));
+	else
+		return (0);
 }
 
 static size_t	conv(const char **fmt, va_list lst, t_flags *f)
@@ -103,7 +105,7 @@ int	ft_printf(const char *fmt, ...)
 	va_start(lst, fmt);
 	while (*fmt)
 	{
-		if ((*fmt) == '%')
+		if ((*fmt) == '%' && fmt[1])
 		{
 			fmt++;
 			count += flag_pars(&fmt, lst, &f);
@@ -115,13 +117,3 @@ int	ft_printf(const char *fmt, ...)
 	va_end(lst);
 	return ((int)count);
 }
-/*
-int main()
-{
-	char c;
-	int n1 = ft_printf("%30p\n", &c);
-	int n2 =    printf("%30p\n", &c);
-	printf("n:%d\n",n1 );
-	printf("n2:%d\n",n2 );
-}
-*/

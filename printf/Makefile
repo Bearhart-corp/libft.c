@@ -38,11 +38,11 @@ bonus: $(NAME)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean: 
-	rm -rf $(OBJ) 
+	rm -f $(OBJ)
 
 fclean: clean
-#	rm -rf $(NAME)
+	rm -f $(NAME)
 
-re: fclean clean
+re: fclean all
 
 .PHONY: all clean fclean bonus re

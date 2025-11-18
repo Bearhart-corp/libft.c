@@ -21,13 +21,13 @@ size_t	ft_putnbr(long n, t_flags f)
 	if (f.point && f.prec == 0 && n == 0)
 		s.n_digit = 0;
 	s.pad_prec = ft_max(f.prec, s.n_digit);
-	s.z = f.width - (int)(s.sign_len + s.pad_prec);
-	if (s.z < 0)
-		s.z = 0;
+	s.width = f.width - (int)(s.sign_len + s.pad_prec);
+	if (s.width < 0)
+		s.width = 0;
 	if (f.flags & ZEROS && !(f.point))
 		s.count += write(1, &s.sign, s.sign_len);
 	if (!(s.is_left))
-		while (s.z--)
+		while (s.width--)
 			s.count += write(1, &s.sym_pad, 1);
 	if (!(f.flags & ZEROS) || f.point)
 		s.count += write(1, &s.sign, s.sign_len);
@@ -35,7 +35,7 @@ size_t	ft_putnbr(long n, t_flags f)
 		s.count += write(1, "0", 1);
 	s.count += write(1, s.buf, s.n_digit);
 	if (s.is_left)
-		while (s.z--)
+		while (s.width--)
 			s.count += write(1, " ", 1);
 	return (s.count);
 }

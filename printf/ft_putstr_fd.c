@@ -29,8 +29,7 @@ size_t	ft_putstr_fd(char *s, t_flags f)
 		t[LEN] = ft_strlen(s);
 	if (f.point && (f.prec < (int)t[LEN]))
 		t[LEN] = (size_t)f.prec;
-	if (f.width > (size_t)t[LEN])
-		t[PAD] = ft_max(f.width, t[LEN]);
+	t[PAD] = ft_max(f.width, t[LEN]);
 	if (!(f.flags & START_LEFT))
 		while (t[PAD]-- > t[LEN])
 			t[COUNT] += write(1, " ", 1);

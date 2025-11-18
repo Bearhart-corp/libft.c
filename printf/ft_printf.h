@@ -70,9 +70,8 @@ typedef struct nombre
 	int		is_left;
 	size_t	n_digit;
 	int		zero_pad_width;
-	int		z;
+	int		width;
 	char	sym_pad;
-	int		zero;
 }	t_nbr;
 
 ////////////// main
