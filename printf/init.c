@@ -12,27 +12,11 @@
 
 #include "ft_printf.h"
 
-static void	helper_init(t_nbr *s, t_flags f, unsigned long n)
+static void	helper_init(t_nbr *s, t_flags f)
 {
-	if (f.conv == PTR)
-		(*s).prefix = "0x";
-	else if ((*s).is_hex && (f.flags & HASH) && n != 0)
-	{
-		if ((*s).upper)
-			(*s).prefix = "0X";
-	}
-	else
-		(*s).prefix_len = 0;
 	(*s).pad = f.width - (int)((*s).sign_len + (*s).n_digit);
 	if ((*s).pad < 0)
 		(*s).pad = 0;
-	if (f.point)
-	{
-		if (f.prec > (int)s->n_digit)
-			(*s).zero = (size_t)(f.prec - (int)(*s).n_digit);
-		else
-			(*s).zero = 0;
-	}
 }
 
 void	init(t_flags *f)
@@ -64,10 +48,8 @@ void	init_nbr(t_nbr *s, t_flags f, unsigned long n)
 	else
 		(*s).sym_pad = ' ';
 	s->upper = (f.conv == HEX_MAJ);
-	(*s).prefix_len = 0;
-	(*s).n_digit = h(n, (*s).base, (*s).buf, f);
-	(*s).prefix_len = 2;
-	helper_init(s, f, n);
+	(*s).n_digit = h(n, f, s);
+	helper_init(s, f);
 }
 
 void	helper_init_int(t_nbr *s, t_flags f, long *n)
@@ -76,7 +58,6 @@ void	helper_init_int(t_nbr *s, t_flags f, long *n)
 		(*s).sym_pad = '0';
 	else
 		(*s).sym_pad = ' ';
-	(*s).prefix_len = 0;
 	if (*n < 0)
 	{
 		(*n) = -(*n);
@@ -88,7 +69,7 @@ void	helper_init_int(t_nbr *s, t_flags f, long *n)
 		(*s).sign = ' ';
 	else
 		(*s).sign_len = 0;
-	(*s).n_digit = ft_putnbr_help(*n, (*s).buf, f);
+	(*s).n_digit = ft_putnbr_help(*n, f, s);
 	(*s).pad = f.width - (int)((*s).sign_len + (*s).n_digit);
 	if ((*s).pad < 0)
 		(*s).pad = 0;
@@ -107,6 +88,5 @@ void	init_nbr_int(t_nbr *s, t_flags f, long *n)
 	(*s).upper = 0;
 	(*s).is_left = (f.flags & START_LEFT);
 	(*s).zero_pad_width = (f.flags & ZEROS) && !((*s).is_left);
-	(*s).prefix = 0;
 	helper_init_int(s, f, n);
 }

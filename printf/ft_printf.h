@@ -68,10 +68,8 @@ typedef struct nombre
 	int		upper;
 	int		is_hex;
 	int		is_left;
-	int		zero_pad_width;
 	size_t	n_digit;
-	char	*prefix;
-	size_t	prefix_len;
+	int		zero_pad_width;
 	int		z;
 	char	sym_pad;
 	int		zero;
@@ -102,8 +100,8 @@ int		ft_max(int a, int b);
 
 ////////////// putnbr helper
 
-size_t	h(unsigned long n, int base, char *buf, t_flags f);
-size_t	ft_putnbr_help(long n, char *buf, t_flags f);
+size_t	h(unsigned long n, t_flags f, t_nbr *s);
+size_t	ft_putnbr_help(long n, t_flags f, t_nbr *s);
 size_t	ptr_zero(t_flags f);
 
 ////////////// init struct

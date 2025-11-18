@@ -12,29 +12,19 @@
 
 #include "ft_printf.h"
 
-static size_t	helper(t_nbr s, t_flags f, unsigned long n)
+static size_t	helper(t_nbr s, t_flags f)
 {
 	if (!(s.is_left))
 	{
 		while (s.z-- > 0)
 			s.count += write(1, &s.sym_pad, 1);
-		while (f.point && s.pad_prec-- > 0)
+	}
+	while (f.point && s.pad_prec-- > 0)
 			s.count += write(1, "0", 1);
 		s.count += write(1, &s.sign, s.sign_len);
-		if (!f.point || f.prec)
-			s.count += write(1, s.buf, s.n_digit);
-		else if (f.point && !(f.prec) && n > 0)
-			s.count += write(1, s.buf, s.n_digit);
-	}
+		s.count += write(1, s.buf, s.n_digit);
 	if (s.is_left)
 	{
-		while (f.point && s.pad_prec-- > 0)
-			s.count += write(1, "0", 1);
-		s.count += write(1, &s.sign, s.sign_len);
-		if (!f.point || f.prec)
-			s.count += write(1, s.buf, s.n_digit);
-		else if (f.point && !(f.prec) && n > 0)
-			s.count += write(1, s.buf, s.n_digit);
 		while (s.z-- > 0)
 			s.count += write(1, &s.sym_pad, 1);
 	}
@@ -57,6 +47,5 @@ size_t	u_putnbr(unsigned long n, t_flags f)
 		s.pad_prec = f.prec - s.n_digit;
 	else
 		s.pad_prec = 0;
-	s.count = helper(s, f, n);
-	return (s.count);
+	return (helper(s, f));
 }

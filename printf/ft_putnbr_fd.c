@@ -17,7 +17,7 @@ size_t	ft_putnbr(long n, t_flags f)
 	t_nbr		s;
 
 	init_nbr_int(&s, f, &n);
-	ft_putnbr_help(n, s.buf, f);
+	ft_putnbr_help(n, f, &s);
 	if (f.point && f.prec == 0 && n == 0)
 		s.n_digit = 0;
 	s.pad_prec = ft_max(f.prec, s.n_digit);

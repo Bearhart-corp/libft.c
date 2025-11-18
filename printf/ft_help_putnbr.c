@@ -21,7 +21,7 @@ int	ft_max(int a, int b)
 		return (b);
 }
 
-static size_t	hh(unsigned long n, int base, char *buf, t_flags f)
+static size_t	hh(unsigned long n, t_flags f, t_nbr *s)
 {
 	size_t	count;
 	size_t	i;
@@ -31,8 +31,8 @@ static size_t	hh(unsigned long n, int base, char *buf, t_flags f)
 	count = 0;
 	while (n > 0)
 	{
-		tmp[count++] = "0123456789abcdef"[n % base];
-		n = n / base;
+		tmp[count++] = "0123456789abcdef"[n % s->base];
+		n = n / s->base;
 	}
 	if (f.conv == PTR || f.flags & HASH)
 	{
@@ -40,45 +40,43 @@ static size_t	hh(unsigned long n, int base, char *buf, t_flags f)
 		tmp[count++] = '0';
 	}
 	while (++i < count)
-		buf[i] = tmp[(count - 1) - i];
+		s->buf[i] = tmp[(count - 1) - i];
 	return (count);
 }
 
-size_t	h(unsigned long n, int base, char *buf, t_flags f)
+size_t	h(unsigned long n, t_flags f, t_nbr *s)
 {
 	size_t	count;
 
 	count = 0;
 	if (n == 0)
 	{
-		buf[count++] = '0';
+		s->buf[count++] = '0';
 		if (f.point && f.prec == 0)
-			buf[--count] = 0;
+			s->buf[--count] = 0;
 		return (count);
 	}
-	return (hh(n, base, buf, f));
+	return (hh(n, f, s));
 }
 
 size_t	ptr_zero(t_flags f)
 {
 	int		pad;
-	size_t	l;
 	char	*nil;
 	size_t	count;
 
 	count = 0;
 	{
 		nil = "(nil)";
-		l = 5;
 		count = 0;
-		if (f.width > l)
-			pad = f.width - l;
+		if (f.width > 5)
+			pad = f.width - 5;
 		else
 			pad = 0;
 		if (!(f.flags & START_LEFT))
 			while (pad--)
 				count += write(1, " ", 1);
-		count += write(1, nil, l);
+		count += write(1, nil, 5);
 		if (f.flags & START_LEFT)
 			while (pad--)
 				count += write(1, " ", 1);
@@ -88,7 +86,7 @@ size_t	ptr_zero(t_flags f)
 
 //////////////// i, d
 
-size_t	ft_putnbr_help(long n, char *buf, t_flags f)
+size_t	ft_putnbr_help(long n, t_flags f, t_nbr *s)
 {
 	size_t	count;
 	size_t	i;
@@ -98,9 +96,9 @@ size_t	ft_putnbr_help(long n, char *buf, t_flags f)
 	count = 0;
 	if (n == 0)
 	{
-		buf[count++] = '0';
+		s->buf[count++] = '0';
 		if (f.point && f.prec == 0)
-			buf[--count] = 0;
+			s->buf[--count] = 0;
 		return (count);
 	}
 	while (n > 0)
@@ -109,6 +107,6 @@ size_t	ft_putnbr_help(long n, char *buf, t_flags f)
 		n = n / 10;
 	}
 	while (++i < count)
-		buf[i] = tmp[(count - 1) - i];
+		s->buf[i] = tmp[(count - 1) - i];
 	return (count);
 }
