@@ -1,0 +1,91 @@
+ Get Next Line — Version optimale log2 (stash dynamique)
+Objectif
+
+Stocker des données dont on ne connaît pas la taille à l’avance sans recopier inutilement.
+Stratégie : stash dynamique comme un std::vector, avec capacité qui double quand elle devient trop petite.
+
+1. Structures à garder par FD
+
+Tu maintiens pour chaque fd une petite structure :
+
+char *stash → buffer dynamique où tu accumules les données lues.
+
+size_t len → nombre d’octets réellement utilisés dans la stash.
+
+size_t cap → capacité allouée totale.
+
+Cap commence à 0 → stash = NULL.
+
+Tu mets ces structures dans un tableau indexé par fd (ex: static t_cap ctx[OPEN_MAX];).
+  tableau de pointeur sur une struct de type t_cap
+
+2. Algorithme principal de GNL
+2.1. Chercher un '\n' dans la stash
+//cas ou on lit une nouvelle ligne:
+Avant tout read, tu regardes si un \n existe déjà dans stash.
+
+Si oui → tu construis tout de suite la ligne depuis la stash.
+
+Sinon → tu continues et tu vas lire plus de données.
+
+2.2. Étape 2 Lire (read) dans un petit buffer stack
+
+char buf[BUFFER_SIZE + 1];
+
+ssize_t n = read(fd, buf, BUFFER_SIZE);
+
+Si n <= 0
+→ soit EOF, soit erreur.
+→ tu rendras ce qui reste dans la stash (si elle n’est pas vide).
+
+2.3. Étape 3 Agrandir la stash intelligemment
+
+Tu veux ajouter n octets à la stash.
+
+ Vérifier la capacité :
+if (len + n > cap)
+    augmenter cap (par ×2) jusqu’à ce que cap >= len + n
+si cap == 0
+  alors cap = n sinon cap
+while (cap < len + n)
+    cap *= 2;
+realloc stash à la nouvelle cap.
+
+Important :
+Tu n’augmentes pas de len + n direct. //de la marge est donc moins d'alloc a faire
+Tu doubles → cela donne un amorti stable, très peu de realloc.
+
+2.4. Étape 4 Copier les données dans la stash
+
+Tu copies seulement les n octets lus :
+
+memcpy(stash + len, buf, n);
+len += n;
+
+Puis tu recommences l’étape “chercher un \n”.
+
+ 3. Construction de la ligne
+
+Quand tu trouves un \n dans la stash :
+
+1) Calculer la longueur de la ligne (index du '\n' + 1) // strchr ou petite fonction similaire
+
+→ tu alloues juste la taille nécessaire.
+
+2) Copier cette partie dans line.
+3) Déplacer le reste du buffer :
+reste = len - line_len;
+memmove(stash, stash + line_len, reste);
+len = reste;
+//partie ou tu dois recup la partie gauche \n inclu et la supprimer du buffer en écrasant les données avec la partie droite
+//buf = partie_droite (une string).
+
+4. Cas finaux : EOF propre
+
+Si read renvoie 0 :
+
+si len > 0 → on renvoie la stash comme dernière ligne
+
+sinon → on renvoie NULL
+
+Et tu free la stash du fd.
