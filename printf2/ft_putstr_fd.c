@@ -25,10 +25,24 @@ static int	ft_strlen(char *s)
 size_t	ft_putstr_fd(char *s, t_flags f)
 {
 	t_nbr	s;
+	size_t	count;
+	size_t	len;
 
+	count = 0;
+	len = ft_strlen(s);
 	init(s, f, 0, &s);
-	return (write(1, s, ft_strlen(s)));
+	if ((f.point && f.prec) && len > f.prec)
+		len = f.prec;
+	if (!(s->isleft))
+		while (s->pad_width-- > 0)
+			count += write(1, " ", 1);
+	count += write(1, s, len);
+	if (s->isleft)
+		while (s->pad_width-- > 0)
+			count += write(1, " ", 1);
+	return (count);
 }
+
 
 /*1010 / 3 (*,/,-)
 
