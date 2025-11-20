@@ -1,91 +1,84 @@
- Get Next Line — Version optimale log2 (stash dynamique)
-Objectif
+Init stricte : vérifier que fd est valide, que BUFFER_SIZE > 0, et que read(fd, "", 0) ne renvoie pas -1
+Avoir une seule variable static : static t_buf_state *lst; (tête de liste).
 
-Stocker des données dont on ne connaît pas la taille à l’avance sans recopier inutilement.
-Stratégie : stash dynamique comme un std::vector, avec capacité qui double quand elle devient trop petite.
+Parcourir la liste chaînée g_list pour trouver le nœud dont t_buf_state->fd == fd.
+Si aucun contexte n’existe pour ce fd :
+malloc un nouveau t_buf_state,
 
-1. Structures à garder par FD
+Chercher un \n dans t_buf_state->stash.
 
-Tu maintiens pour chaque fd une petite structure :
+Si trouvé :
 
-char *stash → buffer dynamique où tu accumules les données lues.
+copier les caractères dans line, mettre '\0'
+décaler le reste de la stash en début de buffer (memmove) comme azur mais faire gaf si le reste est rempli de 0 ou pas, on peut aussi juste null terminate
+retourner line immédiatement
 
-size_t len → nombre d’octets réellement utilisés dans la stash.
+Déclarer un char buf[BUFFER_SIZE]; local.
+Déclarer ssize_t n.
 
-size_t cap → capacité allouée totale.
+Boucler tant qu’aucune ligne complète n’a été trouvée :
+n = read(fd, buf, BUFFER_SIZE);
 
-Cap commence à 0 → stash = NULL.
+Cas d’erreur / EOF
 
-Tu mets ces structures dans un tableau indexé par fd (ex: static t_cap ctx[OPEN_MAX];).
-  tableau de pointeur sur une struct de type t_cap
+Si n < 0 (erreur I/O) :
+libérer t_buf_state->stash si non NULL
+sortir ce t_buf_state de la liste chaînée
+free le t_buf_state
+return NULL
+Si n == 0 (EOF atteint) :
+sortir de la boucle (on gère la stash après)
 
-2. Algorithme principal de GNL
-2.1. Chercher un '\n' dans la stash
-//cas ou on lit une nouvelle ligne:
-Avant tout read, tu regardes si un \n existe déjà dans stash.
+Ajout à la stash
 
-Si oui → tu construis tout de suite la ligne depuis la stash.
+Si n > 0 :
+si t_buf_state->len + n > t_buf_state->cap :
+si t_buf_state->cap == 0, cap = n;
+doubler t_buf_state->cap jusqu’à ce que cap >= t_buf_state->len + n
+realloc la stash avec cap + 1 octets
+copier les n octets de buf à la suite de t_buf_state->stash (mem copy avec un dest a stash + len, buffersize pour les nbytes)
+mettre à jour t_buf_state->len += n
+t_buf_state->stash[t_buf_state->len] = '\0'
 
-Sinon → tu continues et tu vas lire plus de données.
+Recherche d’un \n après ajout
 
-2.2. Étape 2 Lire (read) dans un petit buffer stack
+Ré-examiner t_buf_state->stash pour un \n.
+Si trouvé → extraire la ligne et retourner la ligne.
 
-char buf[BUFFER_SIZE + 1];
+6. EOF sans \n (fin de fichier réelle)
 
-ssize_t n = read(fd, buf, BUFFER_SIZE);
+Si on sort de la boucle car n == 0 : ( apres un read )
+Si t_buf_state->len == 0 (stash vide) :
+libérer t_buf_state->stash si besoin
+retirer le t_buf_state de la liste
+free le t_buf_state
+return NULL // car si stash vide on a 0 char et donc on renvoie NULL 
+Sinon (stash non vide → dernière ligne sans \n) :
+allouer line de taille t_buf_state->len + 1
+copier toute la stash
+line[t_buf_state->len] = '\0'
+libérer t_buf_state->stash
+retirer le t_buf_state de la liste
+free le t_buf_state
+retourner la dernière ligne
 
-Si n <= 0
-→ soit EOF, soit erreur.
-→ tu rendras ce qui reste dans la stash (si elle n’est pas vide).
+si stash != NULL → on doit la free AVANT de free(buf_state)
 
-2.3. Étape 3 Agrandir la stash intelligemment
+EXEMPLE IMPORTANT
 
-Tu veux ajouter n octets à la stash.
+AAAA\nBBBB\nCCCC
+Scénario :
 
- Vérifier la capacité :
-if (len + n > cap)
-    augmenter cap (par ×2) jusqu’à ce que cap >= len + n
-si cap == 0
-  alors cap = n sinon cap
-while (cap < len + n)
-    cap *= 2;
-realloc stash à la nouvelle cap.
+Tu lis AAAA\nBB → tu rends AAAA\n →
+stash = "BB" (reste après le \n).
 
-Important :
-Tu n’augmentes pas de len + n direct. //de la marge est donc moins d'alloc a faire
-Tu doubles → cela donne un amorti stable, très peu de realloc.
+Tu relis encore → tu rajoutes à la stash →
+stash devient "BBBB\nCCCC"
+→ tu rends BBBB\n
+→ stash = "CCCC".
 
-2.4. Étape 4 Copier les données dans la stash
+Tant qu’il y a \n, tu continues ce jeu “ligne rendue / reste dans stash”.
 
-Tu copies seulement les n octets lus :
+Ici, stash ≠ "ligne entière".
+C’est juste le buffer-tampon de ce qui dépasse la dernière ligne rendue.
 
-memcpy(stash + len, buf, n);
-len += n;
-
-Puis tu recommences l’étape “chercher un \n”.
-
- 3. Construction de la ligne
-
-Quand tu trouves un \n dans la stash :
-
-1) Calculer la longueur de la ligne (index du '\n' + 1) // strchr ou petite fonction similaire
-
-→ tu alloues juste la taille nécessaire.
-
-2) Copier cette partie dans line.
-3) Déplacer le reste du buffer :
-reste = len - line_len;
-memmove(stash, stash + line_len, reste);
-len = reste;
-//partie ou tu dois recup la partie gauche \n inclu et la supprimer du buffer en écrasant les données avec la partie droite
-//buf = partie_droite (une string).
-
-4. Cas finaux : EOF propre
-
-Si read renvoie 0 :
-
-si len > 0 → on renvoie la stash comme dernière ligne
-
-sinon → on renvoie NULL
-
-Et tu free la stash du fd.
