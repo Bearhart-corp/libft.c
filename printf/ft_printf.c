@@ -20,8 +20,10 @@ static size_t	print_fmt(va_list lst, t_flags *f)
 		return (ft_putchar_fd((char)va_arg(lst, int), *f));
 	if (f->conv == INTEGER)
 		return (ft_putnbr((long)va_arg(lst, int), *f));
-	if (f->conv >= PTR && f->conv <= HEX_MAJ)
+	if (f->conv == PTR)
 		return (u_putnbr((unsigned long)va_arg(lst, void *), *f));
+	if (f->conv == UNSIGNED || f->conv == HEX_LOW || f->conv == HEX_MAJ)
+		return (u_putnbr((unsigned long)va_arg(lst, unsigned int), *f));
 	if (f->conv == 8)
 		return (ft_putfloat(va_arg(lst, double), *f));
 	else
