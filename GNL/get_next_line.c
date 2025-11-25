@@ -10,10 +10,11 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "get_next_line.h"
 
 char	*get_next_line(int fd)
 {
-	static char	buf[fd][BUFFER_SIZE + 1];
+	static char	buf[OPEN_MAX][BUFFER_SIZE + 1];
 	char		left[BUFFER_SIZE + 1];
 	char		*tmp;
 	char		*line;
@@ -40,7 +41,7 @@ char	*get_next_line(int fd)
 		if (ft_strchr(buf[fd], 10))
 		{
 			ft_memmove(left, buf[fd], ft_strchr(buf[fd], 10));
-			ft_memmove(buf[fd], ft_strchr(buf[fd], 10), buf[fd][BUFFER_SIZE - 1]);
+			ft_memmove(buf[fd], ft_strchr(buf[fd], 10), &buf[fd][BUFFER_SIZE - 1]);
 			ft_memmove(line + len, left, left + BUFFER_SIZE - 1);
 			return (line);
 		}
@@ -52,5 +53,6 @@ char	*get_next_line(int fd)
 int main()
 {
 	int fd = open("test.txt", O_RDONLY);
+	printf("%s\n", get_next_line(fd));
 	printf("%s\n", get_next_line(fd));
 }
