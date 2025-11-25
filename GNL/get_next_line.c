@@ -37,14 +37,18 @@ char	*get_next_line(int fd)
 			ft_memmove(s.line, s.tmp, s.tmp + s.len);
 			free(s.tmp);
 		}
-		s.tmp = buf[fd] + BUFFER_SIZE - 1;
-		s.addr = ft_strchr(buf[fd], 10, BUFFER_SIZE);
+		s.tmp = buf[fd] + (s.byte - 1);
+		s.addr = ft_strchr(buf[fd], 10, s.byte);
 		if (s.addr)
 			return (ret_line(s, buf[fd]));
-		ft_memmove(s.line + s.len, buf[fd], s.tmp);
+		ft_memmove(s.line + s.len, buf[fd], s.tmp);//ajoute a la suite n_byte
 		s.byte = read(fd, buf[fd], BUFFER_SIZE);
+		if (s.byte >= 0)
+			buf[fd][s.byte] = 0;
 		s.len += s.byte;
 	}
+	if (s.len == 0)
+		return (NULL, free(line));
 	return (s.line);
 }
 
