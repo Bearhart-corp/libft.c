@@ -25,20 +25,19 @@
 
 typedef struct s_var
 {
-	char		left[BUFFER_SIZE + 1];
-	char		*tmp;
-	char		*line;
-	size_t		len;
-	size_t		cap;
-	ssize_t		byte;
-	char		*addr;
+	char	*line;
+	size_t	len;
+	size_t	cap;
+	ssize_t	byte;
+	ssize_t	i;
 }	t_var;
 
-void	*ft_memmove(void *dest, const void *src, char *add_end);
 size_t	ft_strlen(const char *s);
-char	*ft_strchr(const char *s, int c, size_t n);
+void	*ft_memmove(void *dst, const void *src, size_t n);
 
-void	init(t_var *s, char *buf, int fd);
+void	init(t_var *s, char *buf_fd);
+int		ensure_cap(t_var *s);
 
 char	*get_next_line(int fd);
+
 #endif
