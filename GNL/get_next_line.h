@@ -32,7 +32,7 @@ typedef struct s_buf
 
 void	*ft_memmove(void *dest, const void *src, char *add_end);
 size_t	ft_strlen(const char *s);
-char	*find_new_line(char *s);
 char	*ft_strchr(const char *s, int c);
 
+char	*get_next_line(int fd);
 #endif
