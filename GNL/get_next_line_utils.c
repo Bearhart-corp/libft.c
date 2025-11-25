@@ -9,7 +9,7 @@
 /*   Updated: 2025/11/18 15:51:03 by tbelard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include <stdio.h>
+
 #include "get_next_line.h"
 
 void	init(t_var *s, char *buf, int fd)
@@ -24,6 +24,8 @@ void	init(t_var *s, char *buf, int fd)
 		s->len = ft_strlen(s->line);
 	}
 	s->byte = read(fd, buf, BUFFER_SIZE);
+	if (s->byte >= 0)
+   		buf[s->byte] = 0;
 	s->addr = NULL;
 }
 
