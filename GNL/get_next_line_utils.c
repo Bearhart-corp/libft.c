@@ -9,8 +9,23 @@
 /*   Updated: 2025/11/18 15:51:03 by tbelard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
+#include <stdio.h>
 #include "get_next_line.h"
+
+void	init(t_var *s, char *buf, int fd)
+{
+	s->tmp = NULL;
+	s->cap = BUFFER_SIZE + 1;
+	s->line = malloc(s->cap);
+	s->len = 0;
+	if (*buf)
+	{
+		ft_memmove(s->line, buf, ft_strchr(buf, 0, BUFFER_SIZE));
+		s->len = ft_strlen(s->line);
+	}
+	s->byte = read(fd, buf, BUFFER_SIZE);
+	s->addr = NULL;
+}
 
 size_t	ft_strlen(const char *s)
 {
@@ -24,12 +39,12 @@ size_t	ft_strlen(const char *s)
 	return (len);
 }
 
-char	*ft_strchr(const char *s, int c)
+char	*ft_strchr(const char *s, int c, size_t n)
 {
 	int	i;
 
 	i = -1;
-	while (s[++i])
+	while (s[++i] && n--)
 	{
 		if (s[i] == (char)c)
 			return ((char *)s + i);

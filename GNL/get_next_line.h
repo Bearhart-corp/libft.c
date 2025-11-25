@@ -23,16 +23,22 @@
 # define BUFFER_SIZE 5
 # define OPEN_MAX 1024
 
-typedef struct s_buf
+typedef struct s_var
 {
-	char			*stash;
-	size_t			len;
-	size_t			cap;
-}	t_buf_state;
+	char		left[BUFFER_SIZE + 1];
+	char		*tmp;
+	char		*line;
+	size_t		len;
+	size_t		cap;
+	ssize_t		byte;
+	char		*addr;
+}	t_var;
 
 void	*ft_memmove(void *dest, const void *src, char *add_end);
 size_t	ft_strlen(const char *s);
-char	*ft_strchr(const char *s, int c);
+char	*ft_strchr(const char *s, int c, size_t n);
+
+void	init(t_var *s, char *buf, int fd);
 
 char	*get_next_line(int fd);
 #endif

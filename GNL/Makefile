@@ -13,24 +13,27 @@
 NAME = gnl.a
 
 CC = cc
+CFLAGS = -Wall -Wextra -Werror
 
-CFLAGS = -Wall -Werror -Wextra
-
-SRC = get_next_line_utils.c \
-		 get_next_line.c
-
+SRC = get_next_line.c get_next_line_utils.c
 OBJ = $(SRC:.c=.o)
 
+BONUS_SRC = get_next_line_bonus.c get_next_line_utils_bonus.c
+BONUS_OBJ = $(BONUS_SRC:.c=.o)
+
 all: $(NAME)
-$(NAME) : $(OBJ)
-	ar rsc $(NAME) $(OBJ)
-bonus: $(NAME)
+
+$(NAME): $(OBJ)
+	ar rcs $(NAME) $(OBJ)
+
+bonus: $(BONUS_OBJ)
+	ar rcs $(NAME) $(BONUS_OBJ)
 
 %.o: %.c get_next_line.h
 	$(CC) $(CFLAGS) -c $< -o $@
 
-clean: 
-	rm -f $(OBJ)
+clean:
+	rm -f $(OBJ) $(BONUS_OBJ)
 
 fclean: clean
 	rm -f $(NAME)
